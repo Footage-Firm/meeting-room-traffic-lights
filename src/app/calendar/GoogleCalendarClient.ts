@@ -1,5 +1,5 @@
 import config from 'config'
-import CalendarAPI from 'node-google-calendar';
+import {google} from 'googleapis';
 import * as path from "path";
 import * as fs from "fs";
 import dayjs from 'dayjs'
