@@ -18,7 +18,6 @@ const container = new Container({skipBaseClassChecks: true});
  *
  * If we get too many services or the configuration gets too complex, we can explore making service providers
  *   or container modules (https://github.com/inversify/InversifyJS/blob/master/wiki/container_modules.md).
- *
  */
 import ExampleService from "./example/ExampleService";
 container.bind(ExampleService).toSelf();
