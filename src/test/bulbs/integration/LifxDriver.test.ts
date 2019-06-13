@@ -1,4 +1,4 @@
-import LifxDriver from "../../../app/bulbs/drivers/LifxDriver";
+import LifxDriver from "../../../app/drivers/LifxDriver";
 import Color from "../../../app/bulbs/Color";
 
 describe('LifxDriver Integration Test', () => {
@@ -15,7 +15,7 @@ describe('LifxDriver Integration Test', () => {
     });
 
     test('color', async () => {
-        await driver.color('d073d53c9ba4', Color.GREEN)
+        await driver.color('d073d53c9ba4', Color.GREEN);
     });
 
 });

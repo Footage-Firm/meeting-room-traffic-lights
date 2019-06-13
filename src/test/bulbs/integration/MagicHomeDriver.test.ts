@@ -1,4 +1,4 @@
-import MagicHomeDriver from "../../../app/bulbs/drivers/MagicHomeDriver";
+import MagicHomeDriver from "../../../app/drivers/MagicHomeDriver";
 import Color from "../../../app/bulbs/Color";
 
 describe('MagicHomeDriver Integration Test', () => {
