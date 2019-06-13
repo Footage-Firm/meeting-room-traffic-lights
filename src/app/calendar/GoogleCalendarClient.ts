@@ -3,40 +3,37 @@ import {google} from 'googleapis';
 import * as path from "path";
 import * as fs from "fs";
 import dayjs from 'dayjs'
+import {JWT} from 'google-auth-library';
 
 export default class GoogleCalendarClient {
 
-    private cal: any;
+    private calendar: any;
 
     constructor() {
-        let key;
-        try {
-            const keyFile = path.resolve(__dirname, '../../..', config.get('google.serviceAccountKeyFile'))
-            key = JSON.parse(fs.readFileSync(keyFile, 'utf8'))
-        } catch (err) {
-            throw new Error('Could not parse service account key JSON file: ' + err.message)
-        }
-
-        this.cal = new CalendarAPI({
-            key: key.private_key,
-            serviceAcctId: key.client_email,
-            timezone: config.get('google.timezone')
-        })
+        this.calendar = google.calendar({version: 'v3', auth: this.auth()});
     }
 
-    public async do(): Promise<any> {
+    public async listEvents(): Promise<any[]> {
 
-        // console.log(await this.cal.CalendarList.list({showHidden: true}))
-        // return
+        const roomMap = config.get('google.roomIdMap');
 
-        const params = {
-            timeMin: dayjs().toISOString(),
-            timeMax: dayjs().subtract(3, 'day').toISOString(),
-            q: 'asdf'
-        };
-        const events = await this.cal.Events.list('', params);
+        const {data: {items}} = await this.calendar.events.list({
+            calendarId: roomMap['roomOne'],
+            timeMin: dayjs().subtract(1, 'day').toISOString(),
+            maxResults: 10,
+            singleEvents: true,
+            orderBy: 'startTime',
+        })
 
-        console.info(events)
+        return items
 
+    }
+
+    private auth(): JWT {
+        return new JWT({
+            keyFile: path.resolve(__dirname, '../../..', config.get('google.serviceAccountKeyFile')),
+            subject: config.get('google.subject'),
+            scopes: ['https://www.googleapis.com/auth/calendar.readonly']
+        })
     }
 }

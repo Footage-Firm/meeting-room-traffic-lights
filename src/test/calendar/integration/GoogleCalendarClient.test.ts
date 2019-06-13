@@ -4,8 +4,9 @@ describe('GoogleCalendarClient Integration Test', () => {
 
     const client = new GoogleCalendarClient();
 
-    test('asdf', async () => {
-        await client.do()
+    test('listEvents', async () => {
+        const events = await client.listEvents()
+        expect(events).toBeInstanceOf(Array)
     });
 
 });

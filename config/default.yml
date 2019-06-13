@@ -2,4 +2,7 @@
 google:
   timezone: 'UTC+00:00'
   serviceAccountKeyFile: 'config/service_account_key.json'
-  calendarId: ''
+  subject: '...@gmail.com'
+  roomIdMap: {
+    roomOne: '...@resource.calendar.google.com'
+  }
