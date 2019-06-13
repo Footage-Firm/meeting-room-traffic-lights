@@ -23,4 +23,7 @@ const container = new Container({skipBaseClassChecks: true});
 import ExampleService from "./example/ExampleService";
 container.bind(ExampleService).toSelf();
 
+import CalendarService from "./calendar/CalendarService";
+container.bind(CalendarService).toSelf();
+
 export default container;
