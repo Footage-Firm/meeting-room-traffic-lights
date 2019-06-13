@@ -6,7 +6,7 @@ export default class MagicHomeDriver implements BulbDriver {
 
     async scan(): Promise<any> {
         const discovery = new Discovery();
-        const results = await discovery.scan(1000);
+        const results = await discovery.scan(3000);
         return results;
     }
 
@@ -20,7 +20,8 @@ export default class MagicHomeDriver implements BulbDriver {
             wait_for_reply: false
         });
 
-        await light.setColorWithBrightness(color.r, color.g, color.b, color.brightness)
+        // Promise from setColor does not currently return.
+        light.setColorWithBrightness(color.r, color.g, color.b, color.brightness)
     }
 
 }

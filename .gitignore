@@ -11,3 +11,4 @@ npm-debug.log*
 
 # Local Configs
 config/**/local*
+service_account_key.json

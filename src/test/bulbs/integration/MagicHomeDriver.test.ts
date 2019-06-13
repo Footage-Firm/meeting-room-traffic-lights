@@ -12,7 +12,7 @@ describe('MagicHomeDriver Integration Test', () => {
     });
 
     test('color', async () => {
-        await driver.color('10.100.40.52', Color.PURPLE)
+        await driver.color('10.100.41.214', new Color(255, 0, 0, 15))
     });
 
 });

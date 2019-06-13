@@ -1,2 +1,5 @@
 ---
-test: 'testy'
+google:
+  timezone: 'UTC+00:00'
+  serviceAccountKeyFile: 'config/service_account_key.json'
+  calendarId: ''
