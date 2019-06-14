@@ -9,5 +9,5 @@ roomBulbMap: {
 }
 
 timing:
-  meetingEndIntervalMinutes: 2
+  meetingEndIntervalMinutes: 3
   meetingWarningIntervalMinutes: 5

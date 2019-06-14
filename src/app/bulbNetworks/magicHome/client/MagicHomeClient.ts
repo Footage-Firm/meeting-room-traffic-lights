@@ -14,7 +14,7 @@ export default class MagicHomeClient {
     }
 
     async setMagicHomeBulbColor(bulbIp: string, color: Color): Promise<void> {
-        console.debug('Changing color for Magic Home bulb', bulbIp);
+        console.debug('Changing color for Magic Home bulb', bulbIp, color);
         const light = new Control(bulbIp, {
             apply_masks: true,
             wait_for_reply: false

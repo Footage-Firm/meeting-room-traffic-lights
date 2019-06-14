@@ -36,7 +36,7 @@ export default class Color {
     }
 
     static get ORANGE(): Color {
-        return new this(255,165,0)
+        return new this(255,75,0)
     }
 
     static get GREEN(): Color {

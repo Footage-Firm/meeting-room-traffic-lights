@@ -59,13 +59,18 @@ export default class MeetingTrafficLights {
         // Else off (BLACK)
         const {currentMeeting, previousMeeting, nextMeeting} = this.adjacentMeetings(meetings, now);
 
+        const roomName = room.name
         if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes) {
+            console.debug('Meeting over!', {roomName, diff: now.diff(previousMeeting.end, 'minute')})
             return Color.RED;
-        } else if (currentMeeting && now.diff(currentMeeting.end, 'minute') <= this._meetingWarningIntervalMinutes) {
-            return Color.YELLOW;
+        } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') <= this._meetingWarningIntervalMinutes) {
+            console.debug('Meeting ending soon.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
+            return Color.ORANGE;
         } else if (currentMeeting) {
+            console.debug('Meeting in progress.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
             return Color.GREEN;
         } else {
+            console.debug('No meeting.', {roomName})
             return Color.BLACK;
         }
 
