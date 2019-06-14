@@ -19,7 +19,7 @@ export default class LifxClient {
         console.debug('Scanning for LIFX bulbNetworks');
         const url = 'https://api.lifx.com/v1/lights/all';
         const response = await axios.get(url, this.axiosDefaultConfig);
-        const bulbs = (response.data || []).map(d => new LifxClientBulbInfo(d.id, d.label));
+        const bulbs = (response.data || []).filter(d => d.connected).map(d => new LifxClientBulbInfo(d.id, d.label));
         console.debug('Found LIFX bulbNetworks', bulbs);
         return bulbs;
     }
