@@ -1,6 +1,4 @@
-import config from 'config'
 import {admin_directory_v1, calendar_v3, google} from 'googleapis';
-import * as path from "path";
 import dayjs, {Dayjs} from 'dayjs'
 import {JWT} from 'google-auth-library';
 import Calendar = calendar_v3.Calendar;
@@ -13,8 +11,8 @@ export default class GoogleCalendarClient {
     private calendar: Calendar;
     private admin: Admin;
 
-    constructor() {
-        const auth = this.auth();
+    constructor(serviceAccountKeyFile: string, subject: string) {
+        const auth = this.auth(serviceAccountKeyFile, subject);
         this.calendar = google.calendar({version: 'v3', auth});
         this.admin = google.admin({version: 'directory_v1', auth})
     }
@@ -53,10 +51,10 @@ export default class GoogleCalendarClient {
 
     }
 
-    private auth(): JWT {
+    private auth(keyFile: string, subject: string): JWT {
         return new JWT({
-            keyFile: path.resolve(__dirname, '../../..', config.get('google.serviceAccountKeyFile')),
-            subject: config.get('google.subject'),
+            keyFile,
+            subject,
             scopes: [
                 'https://www.googleapis.com/auth/calendar.readonly',
                 'https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly'

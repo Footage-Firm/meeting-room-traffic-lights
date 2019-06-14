@@ -1,5 +1,7 @@
 import 'reflect-metadata';
-import {Container} from 'inversify';
+import * as path from "path";
+import {Container, interfaces} from 'inversify';
+import config from 'config';
 
 /**
  * @see https://github.com/inversify/InversifyJS
@@ -23,6 +25,10 @@ import ExampleService from "./example/ExampleService";
 container.bind(ExampleService).toSelf();
 
 import CalendarService from "./calendar/CalendarService";
-container.bind(CalendarService).toSelf();
+import GoogleCalendarClient from "./calendar/GoogleCalendarClient";
+container.bind(CalendarService).toDynamicValue((context: interfaces.Context) => {
+    const keyFile = path.resolve(__dirname, '../../', config.get('google.serviceAccountKeyFile'));
+    return new CalendarService(new GoogleCalendarClient(keyFile, config.get('google.subject')))
+});
 
 export default container;

@@ -24,12 +24,16 @@ export default class MeetingTrafficLights {
         this._networks.push(network)
     }
 
-    public  setMeetingEndIntervalMinutes(value: number) {
+    public setMeetingEndIntervalMinutes(value: number) {
         this._meetingEndIntervalMinutes = value;
     }
 
-    public  setMeetingWarningIntervalMinutes(value: number) {
+    public setMeetingWarningIntervalMinutes(value: number) {
         this._meetingWarningIntervalMinutes = value;
+    }
+
+    public setCalendar(calendarService: CalendarService): void {
+        this.calendarService = calendarService
     }
 
     public async syncBulbs(): Promise<void> {

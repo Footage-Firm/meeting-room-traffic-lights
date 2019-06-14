@@ -4,7 +4,7 @@ import Room from "./Room";
 import Meeting from "./Meeting";
 
 export default class CalendarService {
-    constructor(private client: GoogleCalendarClient = new GoogleCalendarClient()) {}
+    constructor(private client: GoogleCalendarClient) {}
 
     public async rooms(): Promise<Room[]> {
         return await this.client.listRooms();
