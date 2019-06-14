@@ -16,10 +16,6 @@ export default class MeetingTrafficLights {
     private _meetingEndIntervalMinutes: number = 5;
     private _meetingWarningIntervalMinutes: number = 5;
 
-    constructor(calendarService: CalendarService = new CalendarService()) {
-        this._calendarService = calendarService
-    }
-
     public addNetwork(network: any): void {
         this._networks.push(network)
     }
@@ -33,7 +29,7 @@ export default class MeetingTrafficLights {
     }
 
     public setCalendar(calendarService: CalendarService): void {
-        this.calendarService = calendarService
+        this._calendarService = calendarService
     }
 
     public async syncBulbs(): Promise<void> {
