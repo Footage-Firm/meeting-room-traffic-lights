@@ -3,9 +3,10 @@ google:
   timezone: 'UTC+00:00'
   serviceAccountKeyFile: 'config/service_account_key.json'
   subject: '...@gmail.com'
-  roomIdMap: {
-    roomOne: '...@resource.calendar.google.com'
-  }
+
+roomBulbMap: {
+  roomOne: '...@resource.calendar.google.com'
+}
 
 timing:
   meetingEndIntervalMinutes: 2

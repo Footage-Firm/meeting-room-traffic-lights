@@ -7,7 +7,7 @@ export default class MagicHomeClient {
     async scanForMagicHomeBulbs(): Promise<MagicHomeBulbInfo[]> {
         console.debug('Scanning for Magic Home bulbNetworks');
         const discovery = new Discovery();
-        const results = await discovery.scan(1000);
+        const results = await discovery.scan(3000);
         const bulbs = (results || []).map(r => new MagicHomeBulbInfo(r.id, r.address));
         console.debug('Found Magic Home bulbNetworks', bulbs);
         return bulbs;

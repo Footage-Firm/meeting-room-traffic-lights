@@ -1,8 +1,8 @@
+import config from "config";
+import dayjs, {Dayjs} from 'dayjs';
 import CalendarService from "../calendar/CalendarService";
 import Room from "../calendar/Room";
-import dayjs from 'dayjs';
 import Meeting from "../calendar/Meeting";
-import {Dayjs} from "dayjs";
 import Color from "../bulbNetworks/Color";
 import BulbNetwork from "../bulbNetworks/BulbNetwork";
 import Bulb from "../bulbNetworks/Bulb";
@@ -12,6 +12,7 @@ export default class MeetingTrafficLights {
     private _calendarService: CalendarService;
     private _networks: BulbNetwork[] = [];
     private _rooms: Room[] = [];
+    private _roomBulbMap: Map<Room, Bulb> = new Map<Room, Bulb>();
 
     //Timing
     private _meetingEndIntervalMinutes: number = 5;
@@ -38,15 +39,18 @@ export default class MeetingTrafficLights {
         await this.mapBulbsToRooms(); // you have already added networks
 
         // for each room, find the current ideal state of its bulb
-        for (let room of this._rooms) {
+        for (let room of this._roomBulbMap.keys()) {
             const color = await this.getBulbColor(room);
             console.debug('Setting color for room', {color, room})
+            const bulb = this._roomBulbMap.get(room)
+            await bulb.setColor(color)
         }
     }
 
     private async getBulbColor(room: Room): Promise<Color> {
 
         const now = dayjs();
+        console.debug('Getting meetings for room', {room})
         const meetings = await this._calendarService.meetingsToday(room)
 
         // If it is after the previous meeting, RED
@@ -105,7 +109,24 @@ export default class MeetingTrafficLights {
             bulbs = bulbs.concat(await network.scanForBulbs())
         }
 
-        console.debug('Syncing bulbs and rooms', {bulbs, rooms: this._rooms})
+        console.debug('Syncing bulbs and rooms', {bulbs})
+
+        const roomBulbMap = config.get('roomBulbMap') as Map<string, string>
+
+        for (let roomSubString in roomBulbMap) {
+            for (let room of this._rooms) {
+                if (room.name.toLowerCase().includes(roomSubString.toLowerCase())) {
+                    const bulbId = roomBulbMap.get(roomSubString);
+                    const bulb = bulbs.find(b => bulbId == b.id)
+                    if (!bulb) {
+                        throw new Error('Could not find bulb for bulbId: ' + bulbId)
+                    }
+
+                    console.debug('Mapping room to bulb', {room, bulb})
+                    this._roomBulbMap.set(room, bulb)
+                }
+            }
+        }
 
     }
 

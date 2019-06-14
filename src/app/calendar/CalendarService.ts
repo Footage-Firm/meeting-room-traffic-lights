@@ -12,7 +12,12 @@ export default class CalendarService {
 
     public async meetingsToday(room: Room): Promise<Meeting[]> {
         const beginningOfToday = dayjs().startOf('day');
-        return await this.client.listMeetings(room.email, beginningOfToday);
+        try {
+            return await this.client.listMeetings(room.email, beginningOfToday);
+        } catch (err) {
+            console.warn('Could not get meetings for room: ' + room.name)
+            return []
+        }
     }
 
 }
