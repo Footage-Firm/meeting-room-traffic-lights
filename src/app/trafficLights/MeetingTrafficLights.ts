@@ -22,14 +22,6 @@ export default class MeetingTrafficLights {
         this._networks.push(network)
     }
 
-    public setMeetingEndIntervalMinutes(value: number) {
-        this._meetingEndIntervalMinutes = value;
-    }
-
-    public setMeetingWarningIntervalMinutes(value: number) {
-        this._meetingWarningIntervalMinutes = value;
-    }
-
     public setCalendar(calendarService: CalendarService): void {
         this._calendarService = calendarService
     }
@@ -46,6 +38,21 @@ export default class MeetingTrafficLights {
             await bulb.setColor(color)
         }
     }
+
+    public async scan() {
+        for (let network of this._networks) {
+            await network.scanForBulbs()
+        }
+    }
+
+    public setMeetingEndIntervalMinutes(value: number) {
+        this._meetingEndIntervalMinutes = value;
+    }
+
+    public setMeetingWarningIntervalMinutes(value: number) {
+        this._meetingWarningIntervalMinutes = value;
+    }
+
 
     private async getBulbColor(room: Room): Promise<Color> {
 

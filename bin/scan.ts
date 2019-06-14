@@ -8,19 +8,10 @@ import CalendarService from "../src/app/calendar/CalendarService";
 
 //config
 const lifxToken = config.get('lifx.token') as string;
-const meetingWarningIntervalMinutes = config.get('timing.meetingWarningIntervalMinutes') as number;
-const meetingEndIntervalMinutes = config.get('timing.meetingEndIntervalMinutes') as number;
 
 const lights = new MeetingTrafficLights();
 lights.addNetwork(new LifxBulbNetwork(lifxToken));
 lights.addNetwork(new MagicHomeBulbNetwork());
 
-const keyFile = path.resolve(__dirname, '../', config.get('google.serviceAccountKeyFile'));
-const client = new GoogleCalendarClient(keyFile, config.get('google.subject'))
-const service = new CalendarService(client)
-lights.setCalendar(service)
 
-lights.setMeetingWarningIntervalMinutes(meetingWarningIntervalMinutes);
-lights.setMeetingEndIntervalMinutes(meetingEndIntervalMinutes);
-
-setInterval(() => lights.syncBulbs(), 15*1000);
+// setInterval(() => lights.scan(), 10000)

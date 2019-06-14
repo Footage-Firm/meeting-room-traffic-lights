@@ -10,6 +10,8 @@
   "author": "engineering@storyblocks.com",
   "license": "ALv2",
   "scripts": {
+    "main": "ts-node bin/main.ts",
+    "scan": "ts-node bin/scan.ts",
     "test": "jest"
   },
   "dependencies": {
