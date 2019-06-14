@@ -6,49 +6,62 @@ import {Dayjs} from "dayjs";
 import Color from "../bulbNetworks/Color";
 import BulbNetwork from "../bulbNetworks/BulbNetwork";
 
-export default class TrafficLights {
+export default class MeetingTrafficLights {
 
-    private calendarService: CalendarService
-    private networks: BulbNetwork[]
-    private rooms: Room[]
+    private _calendarService: CalendarService;
+    private _networks: BulbNetwork[];
+    private _rooms: Room[];
+
+    //Timing
+    private _meetingEndIntervalMinutes: number = 5;
+    private _meetingWarningIntervalMinutes: number = 5;
 
     constructor(calendarService: CalendarService = new CalendarService()) {
-        this.calendarService = calendarService
+        this._calendarService = calendarService
     }
 
     public addNetwork(network: any): void {
-        this.networks.push(network)
+        this._networks.push(network)
+    }
+
+    public  setMeetingEndIntervalMinutes(value: number) {
+        this._meetingEndIntervalMinutes = value;
+    }
+
+    public  setMeetingWarningIntervalMinutes(value: number) {
+        this._meetingWarningIntervalMinutes = value;
     }
 
     public async syncBulbs(): Promise<void> {
-        await this.findRooms() // pass in config?
-        await this.mapBulbsToRooms() // you have already added networks
+        await this.findRooms(); // pass in config?
+        await this.mapBulbsToRooms(); // you have already added networks
 
         // for each room, find the current ideal state of its bulb
-        for (let room of this.rooms) {
-            const color = await this.getBulbColor(room)
+        for (let room of this._rooms) {
+            const color = await this.getBulbColor(room);
             console.debug('Setting color for room', {color, room})
         }
     }
 
     private async getBulbColor(room: Room): Promise<Color> {
 
-        const now = dayjs()
-        const meetings = await this.calendarService.meetingsToday(room)
+        const now = dayjs();
+        const meetings = await this._calendarService.meetingsToday(room)
 
-        // If it is 0-2 minute after the previous meeting, RED
-        // If it is 5 min before end of current meeting, Orange
-        // If it is >4 min after current meeting, GREEN
-        // Else off
-        const {currentMeeting, previousMeeting, nextMeeting} = this.adjacentMeetings(meetings, now)
-        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= 5) {
-            return Color.RED
-        } else if (currentMeeting && now.diff(currentMeeting.end, 'minute') <= 5) {
-            return Color.YELLOW
+        // If it is after the previous meeting, RED
+        // Otherwise, if it is before end of current meeting, YELLOW
+        // Otherwise, if it is during a meeting, GREEN
+        // Else off (BLACK)
+        const {currentMeeting, previousMeeting, nextMeeting} = this.adjacentMeetings(meetings, now);
+
+        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes) {
+            return Color.RED;
+        } else if (currentMeeting && now.diff(currentMeeting.end, 'minute') <= this._meetingWarningIntervalMinutes) {
+            return Color.YELLOW;
         } else if (currentMeeting) {
-            return Color.GREEN
+            return Color.GREEN;
         } else {
-            return Color.BLACK
+            return Color.BLACK;
         }
 
     }
@@ -82,7 +95,7 @@ export default class TrafficLights {
     }
 
     private async findRooms(): Promise<void> {
-        this.rooms = await this.calendarService.rooms()
+        this._rooms = await this._calendarService.rooms()
     }
 
     private async mapBulbsToRooms(): Promise<void> {

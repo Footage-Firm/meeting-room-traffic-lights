@@ -1,8 +1,8 @@
 import * as faker from 'faker';
-import TrafficLights from "../../../app/trafficLights/TrafficLights";
+import MeetingTrafficLights from "../../../app/trafficLights/MeetingTrafficLights";
 
-describe('TrafficLights Integration Test', () => {
-    const trafficLights = new TrafficLights()
+describe('MeetingTrafficLights Integration Test', () => {
+    const trafficLights = new MeetingTrafficLights()
 
     test('syncBulbs', async () => {
         await trafficLights.syncBulbs()
