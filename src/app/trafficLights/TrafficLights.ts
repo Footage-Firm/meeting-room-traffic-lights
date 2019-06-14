@@ -1,15 +1,16 @@
 import CalendarService from "../calendar/CalendarService";
 import Room from "../calendar/Room";
-import Color from "../bulbs/Color";
 import dayjs from 'dayjs';
 import Meeting from "../calendar/Meeting";
 import {Dayjs} from "dayjs";
+import Color from "../bulbNetworks/Color";
+import BulbNetwork from "../bulbNetworks/BulbNetwork";
 
 export default class TrafficLights {
 
-    private networks: any[]
-    private rooms: Room[]
     private calendarService: CalendarService
+    private networks: BulbNetwork[]
+    private rooms: Room[]
 
     constructor(calendarService: CalendarService = new CalendarService()) {
         this.calendarService = calendarService
@@ -20,8 +21,8 @@ export default class TrafficLights {
     }
 
     public async syncBulbs(): Promise<void> {
-        await this.findRooms()
-        await this.mapBulbsToRooms()
+        await this.findRooms() // pass in config?
+        await this.mapBulbsToRooms() // you have already added networks
 
         // for each room, find the current ideal state of its bulb
         for (let room of this.rooms) {
@@ -40,10 +41,10 @@ export default class TrafficLights {
         // If it is >4 min after current meeting, GREEN
         // Else off
         const {currentMeeting, previousMeeting, nextMeeting} = this.adjacentMeetings(meetings, now)
-        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= 2) {
+        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= 5) {
             return Color.RED
         } else if (currentMeeting && now.diff(currentMeeting.end, 'minute') <= 5) {
-            return Color.PURPLE
+            return Color.YELLOW
         } else if (currentMeeting) {
             return Color.GREEN
         } else {
