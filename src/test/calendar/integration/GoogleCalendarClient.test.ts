@@ -1,10 +1,11 @@
 import config from 'config'
-import {Dayjs} from "dayjs";
 import GoogleCalendarClient from "../../../app/calendar/GoogleCalendarClient";
+import * as path from "path";
 
 describe('GoogleCalendarClient Integration Test', () => {
 
-    const client = new GoogleCalendarClient();
+    const keyFile = path.resolve(__dirname, '../../../../', config.get('google.serviceAccountKeyFile'));
+    const client = new GoogleCalendarClient(keyFile, config.get('google.subject'))
 
     test('listRooms', async () => {
         const rooms = await client.listRooms()
