@@ -2,17 +2,25 @@ import MeetingTrafficLights from "../src/app/trafficLights/MeetingTrafficLights"
 import LifxBulbNetwork from "../src/app/bulbNetworks/lifx/LifxBulbNetwork";
 import config from 'config';
 import MagicHomeBulbNetwork from "../src/app/bulbNetworks/magicHome/MagicHomeBulbNetwork";
+import * as path from "path";
+import GoogleCalendarClient from "../src/app/calendar/GoogleCalendarClient";
+import CalendarService from "../src/app/calendar/CalendarService";
 
 //config
 const lifxToken = config.get('lifx.token') as string;
-const meetingWarningIntervalMinutes = config.get('timing.meetingEndIntervalMinutes') as number;
+const meetingWarningIntervalMinutes = config.get('timing.meetingWarningIntervalMinutes') as number;
 const meetingEndIntervalMinutes = config.get('timing.meetingEndIntervalMinutes') as number;
-//TODO: const pathToGoogleCalendarConfig = config.get('google.calendarConfigPath') as string
 
 const lights = new MeetingTrafficLights();
 lights.addNetwork(new LifxBulbNetwork(lifxToken));
 lights.addNetwork(new MagicHomeBulbNetwork());
-//TODO lights.addCalendar(new GoogleCalendar(pathToConfigFile));
+
+const keyFile = path.resolve(__dirname, '../', config.get('google.serviceAccountKeyFile'));
+const client = new GoogleCalendarClient(keyFile, config.get('google.subject'))
+const service = new CalendarService(client)
+lights.setCalendar(service)
+
 lights.setMeetingWarningIntervalMinutes(meetingWarningIntervalMinutes);
 lights.setMeetingEndIntervalMinutes(meetingEndIntervalMinutes);
+
 lights.syncBulbs();

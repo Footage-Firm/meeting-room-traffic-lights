@@ -6,3 +6,7 @@ google:
   roomIdMap: {
     roomOne: '...@resource.calendar.google.com'
   }
+
+timing:
+  meetingEndIntervalMinutes: 2
+  meetingWarningIntervalMinutes: 5

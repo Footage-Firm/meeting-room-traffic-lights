@@ -48,7 +48,7 @@ export default class Color {
     }
 
     static get BLACK(): Color {
-        return new this(0, 0, 0)
+        return new this(0, 0, 0, 0)
     }
 
 }

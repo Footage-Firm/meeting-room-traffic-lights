@@ -5,12 +5,13 @@ import Meeting from "../calendar/Meeting";
 import {Dayjs} from "dayjs";
 import Color from "../bulbNetworks/Color";
 import BulbNetwork from "../bulbNetworks/BulbNetwork";
+import Bulb from "../bulbNetworks/Bulb";
 
 export default class MeetingTrafficLights {
 
     private _calendarService: CalendarService;
-    private _networks: BulbNetwork[];
-    private _rooms: Room[];
+    private _networks: BulbNetwork[] = [];
+    private _rooms: Room[] = [];
 
     //Timing
     private _meetingEndIntervalMinutes: number = 5;
@@ -99,7 +100,13 @@ export default class MeetingTrafficLights {
     }
 
     private async mapBulbsToRooms(): Promise<void> {
-        throw new Error('Not implemented')
+        let bulbs: Bulb[] = []
+        for (let network of this._networks) {
+            bulbs = bulbs.concat(await network.scanForBulbs())
+        }
+
+        console.debug('Syncing bulbs and rooms', {bulbs, rooms: this._rooms})
+
     }
 
 

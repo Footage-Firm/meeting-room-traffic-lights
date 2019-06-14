@@ -12,7 +12,7 @@ describe('MagicHomeClient Integration Test', () => {
     });
 
     test('setMagicHomeBulbColor', async () => {
-        const ip = '10.100.40.75';
+        const ip = '10.100.40.193';
         await client.setMagicHomeBulbColor(ip, Color.GREEN);
     });
 
