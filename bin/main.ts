@@ -23,4 +23,4 @@ lights.setCalendar(service)
 lights.setMeetingWarningIntervalMinutes(meetingWarningIntervalMinutes);
 lights.setMeetingEndIntervalMinutes(meetingEndIntervalMinutes);
 
-setInterval(() => lights.syncBulbs(), 15*1000);
+setInterval(() => lights.syncBulbs(), 20*1000);

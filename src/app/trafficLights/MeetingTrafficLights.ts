@@ -57,7 +57,7 @@ export default class MeetingTrafficLights {
     private async getBulbColor(room: Room): Promise<Color> {
 
         const now = dayjs();
-        console.debug('Getting meetings for room', {room})
+        // console.debug('Getting meetings for room', {room})
         const meetings = await this._calendarService.meetingsToday(room)
 
         // If it is after the previous meeting, RED
@@ -131,10 +131,12 @@ export default class MeetingTrafficLights {
                     const bulbId = roomBulbMap.get(roomSubString);
                     const bulb = bulbs.find(b => bulbId == b.id)
                     if (!bulb) {
-                        throw new Error('Could not find bulb for bulbId: ' + bulbId)
+                        // throw new Error('Could not find bulb for bulbId: ' + bulbId)
+                        console.warn('Could not find bulb for bulbId.', {bulbId})
+                        continue
                     }
 
-                    console.debug('Mapping room to bulb', {room, bulb})
+                    console.debug('Mapping room to bulb', {room: room.name, bulb: bulb.label})
                     this._roomBulbMap.set(room, bulb)
                 }
             }

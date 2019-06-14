@@ -5,9 +5,10 @@ import MagicHomeBulbInfo from "./MagicHomeBulbInfo";
 export default class MagicHomeClient {
 
     async scanForMagicHomeBulbs(): Promise<MagicHomeBulbInfo[]> {
-        console.debug('Scanning for Magic Home bulbNetworks');
+        const seconds = 4
+        console.debug('Scanning for Magic Home bulbNetworks...', {seconds});
         const discovery = new Discovery();
-        const results = await discovery.scan(3000);
+        const results = await discovery.scan(seconds * 1000);
         const bulbs = (results || []).map(r => new MagicHomeBulbInfo(r.id, r.address));
         console.debug('Found Magic Home bulbNetworks', bulbs);
         return bulbs;
@@ -21,8 +22,6 @@ export default class MagicHomeClient {
         });
 
         await light.setColorWithBrightness(color.r, color.g, color.b, color.brightness);
-
-        console.debug('Color change request sent');
     }
 
 }

@@ -6,12 +6,11 @@ import * as path from "path";
 import GoogleCalendarClient from "../src/app/calendar/GoogleCalendarClient";
 import CalendarService from "../src/app/calendar/CalendarService";
 
-//config
-const lifxToken = config.get('lifx.token') as string;
-
 const lights = new MeetingTrafficLights();
-lights.addNetwork(new LifxBulbNetwork(lifxToken));
+
+// const lifxToken = config.get('lifx.token') as string;
+// lights.addNetwork(new LifxBulbNetwork(lifxToken));
 lights.addNetwork(new MagicHomeBulbNetwork());
 
-
-// setInterval(() => lights.scan(), 10000)
+lights.scan()
+// setInterval(() => lights.scan(), 20*000)
