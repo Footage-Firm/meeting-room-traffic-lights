@@ -1,6 +1,6 @@
 export default class Color {
 
-    constructor(private _r: number, private _g: number, private _b: number, private _brightness: number = 60) {
+    constructor(private _r: number, private _g: number, private _b: number, private _brightness: number = 20) {
     }
 
     get r(): number {
@@ -36,7 +36,7 @@ export default class Color {
     }
 
     static get ORANGE(): Color {
-        return new this(255,175,0)
+        return new this(255,220,0)
     }
 
     static get GREEN(): Color {
