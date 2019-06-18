@@ -8,8 +8,8 @@ import CalendarService from "../src/app/calendar/CalendarService";
 
 const lights = new MeetingTrafficLights();
 
-// const lifxToken = config.get('lifx.token') as string;
-// lights.addNetwork(new LifxBulbNetwork(lifxToken));
+const lifxToken = config.get('lifx.token') as string;
+lights.addNetwork(new LifxBulbNetwork(lifxToken));
 lights.addNetwork(new MagicHomeBulbNetwork());
 
 lights.scan()

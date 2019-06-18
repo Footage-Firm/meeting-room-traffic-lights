@@ -31,12 +31,13 @@ export default class MeetingTrafficLights {
         await this.mapBulbsToRooms(); // you have already added networks
 
         // for each room, find the current ideal state of its bulb
+        const promises = []
         for (let room of this._roomBulbMap.keys()) {
-            const color = await this.getBulbColor(room);
-            console.debug('Setting color for room', {color, room})
             const bulb = this._roomBulbMap.get(room)
-            await bulb.setColor(color)
+            promises.push(this.syncBulb(room, bulb))
         }
+
+        await Promise.all(promises)
     }
 
     public async scan() {
@@ -53,6 +54,14 @@ export default class MeetingTrafficLights {
         this._meetingWarningIntervalMinutes = value;
     }
 
+    private async syncBulb(room: Room, bulb: Bulb) {
+        const color = await this.getBulbColor(room);
+
+        const {r,g,b} = color
+        console.debug('Setting color for room.', {r,g,b, room: room.name, bulb: bulb.label})
+
+        await bulb.setColor(color)
+    }
 
     private async getBulbColor(room: Room): Promise<Color> {
 
@@ -68,16 +77,16 @@ export default class MeetingTrafficLights {
 
         const roomName = room.name
         if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes) {
-            console.debug('Meeting over!', {roomName, diff: now.diff(previousMeeting.end, 'minute')})
+            // console.debug('Meeting over!', {roomName, diff: now.diff(previousMeeting.end, 'minute')})
             return Color.RED;
         } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') <= this._meetingWarningIntervalMinutes) {
-            console.debug('Meeting ending soon.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
+            // console.debug('Meeting ending soon.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
             return Color.ORANGE;
         } else if (currentMeeting) {
-            console.debug('Meeting in progress.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
+            // console.debug('Meeting in progress.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
             return Color.GREEN;
         } else {
-            console.debug('No meeting.', {roomName})
+            // console.debug('No meeting.', {roomName})
             return Color.BLACK;
         }
 
@@ -112,7 +121,9 @@ export default class MeetingTrafficLights {
     }
 
     private async findRooms(): Promise<void> {
-        this._rooms = await this._calendarService.rooms()
+        if (!this._rooms.length) {
+            this._rooms = await this._calendarService.rooms()
+        }
     }
 
     private async mapBulbsToRooms(): Promise<void> {
@@ -121,7 +132,7 @@ export default class MeetingTrafficLights {
             bulbs = bulbs.concat(await network.scanForBulbs())
         }
 
-        console.debug('Syncing bulbs and rooms', {bulbs})
+        // console.debug('Syncing bulbs and rooms')
 
         const roomBulbMap = config.get('roomBulbMap') as Map<string, string>
 
@@ -136,7 +147,7 @@ export default class MeetingTrafficLights {
                         continue
                     }
 
-                    console.debug('Mapping room to bulb', {room: room.name, bulb: bulb.label})
+                    // console.debug('Mapping room to bulb', {room: room.name, bulb: bulb.label})
                     this._roomBulbMap.set(room, bulb)
                 }
             }

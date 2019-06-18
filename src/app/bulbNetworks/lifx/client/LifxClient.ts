@@ -25,7 +25,7 @@ export default class LifxClient {
     }
 
     async setLifxBulbColor(bulbId: string, color: Color): Promise<void> {
-        console.debug('Changing color for LIFX bulb', {bulbId, color});
+        // console.debug('Changing color for LIFX bulb', {bulbId, color});
         const url = `https://api.lifx.com/v1/lights/id:${bulbId}/state`;
         const data = {
             power: 'on',
@@ -33,7 +33,6 @@ export default class LifxClient {
             color: `rgb:${color.r},${color.g},${color.b}`
         };
         const response = await axios.put(url, data, this.axiosDefaultConfig);
-        console.debug('Color change response',response);
     }
 
 }
