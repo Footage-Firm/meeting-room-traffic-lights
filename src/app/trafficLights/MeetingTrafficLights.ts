@@ -72,7 +72,8 @@ export default class MeetingTrafficLights {
         const {currentMeeting, previousMeeting, nextMeeting} = await this._calendarService.getCurrentMeetings(room)
         const now = dayjs();
 
-        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes) {
+        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes
+            || currentMeeting && currentMeeting.end.diff(now, 'minute') == 0) {
             // console.debug('Meeting over!', {roomName, diff: now.diff(previousMeeting.end, 'minute')})
             return Color.RED;
         } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') <= this._meetingWarningIntervalMinutes) {
