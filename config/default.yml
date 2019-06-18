@@ -4,7 +4,7 @@ google:
   serviceAccountKeyFile: 'config/service_account_key.json'
   subject: '...@gmail.com'
 
-roomBulbMap: {
+roomBulbLabelOverrides: {
   roomOne: '...@resource.calendar.google.com'
 }
 

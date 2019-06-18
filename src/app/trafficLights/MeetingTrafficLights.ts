@@ -11,7 +11,6 @@ export default class MeetingTrafficLights {
 
     private _calendarService: CalendarService;
     private _networks: BulbNetwork[] = [];
-    private _rooms: Room[] = [];
     private _roomBulbMap: Map<Room, Bulb> = new Map<Room, Bulb>();
 
     //Timing
@@ -27,8 +26,9 @@ export default class MeetingTrafficLights {
     }
 
     public async syncBulbs(): Promise<void> {
-        await this.findRooms(); // pass in config?
-        await this.mapBulbsToRooms(); // you have already added networks
+        if (!this._roomBulbMap.size) {
+            await this.mapBulbsToRooms();
+        }
 
         // for each room, find the current ideal state of its bulb
         const promises = []
@@ -57,25 +57,21 @@ export default class MeetingTrafficLights {
     private async syncBulb(room: Room, bulb: Bulb) {
         const color = await this.getBulbColor(room);
 
-        const {r,g,b} = color
-        console.debug('Setting color for room.', {r,g,b, room: room.name, bulb: bulb.label})
+        const {r, g, b} = color
+        console.debug('Setting color for room.', {r, g, b, room: room.name, bulb: bulb.label})
 
         await bulb.setColor(color)
     }
 
     private async getBulbColor(room: Room): Promise<Color> {
 
-        const now = dayjs();
-        // console.debug('Getting meetings for room', {room})
-        const meetings = await this._calendarService.meetingsToday(room)
-
         // If it is after the previous meeting, RED
         // Otherwise, if it is before end of current meeting, YELLOW
         // Otherwise, if it is during a meeting, GREEN
         // Else off (BLACK)
-        const {currentMeeting, previousMeeting, nextMeeting} = this.adjacentMeetings(meetings, now);
+        const {currentMeeting, previousMeeting, nextMeeting} = await this._calendarService.getCurrentMeetings(room)
+        const now = dayjs();
 
-        const roomName = room.name
         if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes) {
             // console.debug('Meeting over!', {roomName, diff: now.diff(previousMeeting.end, 'minute')})
             return Color.RED;
@@ -92,65 +88,47 @@ export default class MeetingTrafficLights {
 
     }
 
-    /**
-     * Get the current, previous, and next meetings from a given time. Assumes an ascending sorted list of meetings passed in.
-     * @param {Meeting[]} meetings
-     * @param {Dayjs} time
-     */
-    private adjacentMeetings(meetings: Meeting[], time: Dayjs): { currentMeeting?: Meeting, previousMeeting?: Meeting, nextMeeting?: Meeting } {
-
-        let previousMeeting, currentMeeting, nextMeeting;
-        for (let i = 0; i < meetings.length; i++) {
-            const meeting = meetings[i]
-
-            if (meeting.end.isBefore(time)) {
-                previousMeeting = meeting
-            }
-
-            if (meeting.start.isBefore(time) && meeting.end.isAfter(time)) {
-                currentMeeting = meeting
-            }
-
-            if (meeting.start.isAfter(time)) {
-                nextMeeting = meeting
-                break;
-            }
-        }
-
-        return {currentMeeting, previousMeeting, nextMeeting}
+    private async findRooms(): Promise<Room[]> {
+        return await this._calendarService.rooms()
     }
 
-    private async findRooms(): Promise<void> {
-        if (!this._rooms.length) {
-            this._rooms = await this._calendarService.rooms()
-        }
-    }
-
-    private async mapBulbsToRooms(): Promise<void> {
+    private async findBulbs(): Promise<Bulb[]> {
         let bulbs: Bulb[] = []
         for (let network of this._networks) {
             bulbs = bulbs.concat(await network.scanForBulbs())
         }
+        return bulbs
+    }
 
-        // console.debug('Syncing bulbs and rooms')
+    private async mapBulbsToRooms(): Promise<void> {
 
-        const roomBulbMap = config.get('roomBulbMap') as Map<string, string>
+        const bulbs = await this.findBulbs()
+        const rooms = await this.findRooms()
 
-        for (let roomSubString in roomBulbMap) {
-            for (let room of this._rooms) {
+        for (let room of rooms) {
+
+            let roomBulb: Bulb
+
+            // First, attempt to find the bulb using its label
+            roomBulb = bulbs.find(bulb => {
+                return room.name.toLowerCase().includes(bulb.label.toLowerCase())
+            })
+
+            // Then, attempt to find the bulb in overrides
+            const roomBulbLabelOverrides = config.get('roomBulbLabelOverrides') as Map<string, string>;
+            for (let roomSubString in roomBulbLabelOverrides) {
                 if (room.name.toLowerCase().includes(roomSubString.toLowerCase())) {
-                    const bulbId = roomBulbMap.get(roomSubString);
-                    const bulb = bulbs.find(b => bulbId == b.id)
-                    if (!bulb) {
-                        // throw new Error('Could not find bulb for bulbId: ' + bulbId)
-                        console.warn('Could not find bulb for bulbId.', {bulbId})
-                        continue
-                    }
-
-                    // console.debug('Mapping room to bulb', {room: room.name, bulb: bulb.label})
-                    this._roomBulbMap.set(room, bulb)
+                    const bulbId = roomBulbLabelOverrides.get(roomSubString);
+                    roomBulb = bulbs.find(b => bulbId == b.id)
+                    break
                 }
             }
+
+            if (roomBulb) {
+                console.debug('Mapping room to bulb.', {room, bulb: roomBulb})
+                this._roomBulbMap.set(room, roomBulb)
+            }
+
         }
 
     }
