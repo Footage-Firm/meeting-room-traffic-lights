@@ -11,3 +11,6 @@ roomBulbLabelOverrides: {
 timing:
   meetingEndIntervalMinutes: 3
   meetingWarningIntervalMinutes: 5
+
+lifx:
+  token: '...'

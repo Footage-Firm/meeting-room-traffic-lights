@@ -15,8 +15,11 @@ describe('GoogleCalendarClient Integration Test', () => {
     });
 
     test('listMeetings', async () => {
-        const roomMap = config.get('google.roomIdMap');
-        const meetings = await client.listMeetings(roomMap['roomOne'])
+        const rooms = await client.listRooms()
+        const room = rooms[Math.floor(Math.random()*rooms.length)]
+
+        const meetings = await client.listMeetings(room.email)
+
         expect(meetings).toBeInstanceOf(Array)
         expect(meetings[0]).toBeInstanceOf(Object)
         expect(typeof meetings[0].name).toBe('string')

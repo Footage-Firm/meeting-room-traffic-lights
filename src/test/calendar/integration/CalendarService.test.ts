@@ -7,7 +7,9 @@ describe('CalendarService Integration Test', () => {
 
     test('getCurrentMeetings', async () => {
         const rooms = await calendarService.rooms()
-        const {currentMeeting, previousMeeting, nextMeeting} = await calendarService.getCurrentMeetings(rooms[0])
+        const room = rooms[Math.floor(Math.random()*rooms.length)]
+        console.debug('Testing room for meetings.', {room})
+        const {currentMeeting, previousMeeting, nextMeeting} = await calendarService.getCurrentMeetings(room)
         expect(currentMeeting).toBeDefined()
         expect(currentMeeting.start).toBeInstanceOf(Date)
         expect(currentMeeting.end).toBeInstanceOf(Date)
