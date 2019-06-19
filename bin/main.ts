@@ -15,7 +15,7 @@ async function main() {
 
     const lifxToken = config.get('lifx.token') as string;
     lights.addNetwork(new LifxBulbNetwork(lifxToken));
-    lights.addNetwork(new MagicHomeBulbNetwork());
+    // lights.addNetwork(new MagicHomeBulbNetwork());
 
     const keyFile = path.resolve(__dirname, '../', config.get('google.serviceAccountKeyFile'));
     const client = new GoogleCalendarClient(keyFile, config.get('google.subject'))

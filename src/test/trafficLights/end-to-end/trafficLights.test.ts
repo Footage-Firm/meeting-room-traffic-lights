@@ -8,7 +8,9 @@ import GoogleCalendarClient from "../../../app/calendar/GoogleCalendarClient";
 
 describe('MeetingTrafficLights E2E Test', () => {
 
-    test('asdf', async () => {
+    test('syncBulbs', async () => {
+
+        jest.setTimeout(10000)
 
         const lifxToken = config.get('lifx.token') as string;
         const meetingWarningIntervalMinutes = config.get('timing.meetingWarningIntervalMinutes') as number;

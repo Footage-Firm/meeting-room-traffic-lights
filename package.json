@@ -12,7 +12,8 @@
   "scripts": {
     "main": "ts-node bin/main.ts",
     "scan": "ts-node bin/scan.ts",
-    "test": "jest"
+    "test": "jest src/test/**",
+    "test:unit": "jest src/test/**/unit/**"
   },
   "dependencies": {
     "axios": "^0.19.0",
