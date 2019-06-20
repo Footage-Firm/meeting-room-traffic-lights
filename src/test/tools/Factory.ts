@@ -18,7 +18,8 @@ export default class Factory {
 
     static dummyBulb(label: string = 'Dummy bulb label.'): Bulb {
         type setColor = (color: Color) => Promise<void>
-        return {id: `id: ${label}`, label, setColor: td.func<setColor>()}
+        type powerOn = (on: boolean) => Promise<void>
+        return {id: `id: ${label}`, label, setColor: td.func<setColor>(), powerOn: td.func<powerOn>()}
     }
 
     static dummyRooms(props?: Partial<Room>|Partial<Room>[]): Room[] {

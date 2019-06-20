@@ -35,4 +35,12 @@ export default class LifxClient {
         const response = await axios.put(url, data, this.axiosDefaultConfig);
     }
 
+    async setLifxBulbOn(bulbId: string, on: boolean): Promise<void> {
+        const url = `https://api.lifx.com/v1/lights/id:${bulbId}/state`;
+        const data = {
+            power: 'off'
+        };
+        const response = await axios.put(url, data, this.axiosDefaultConfig);
+    }
+
 }

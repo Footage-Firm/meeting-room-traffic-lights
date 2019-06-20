@@ -54,37 +54,28 @@ export default class MeetingTrafficLights {
         this._meetingWarningIntervalMinutes = value;
     }
 
-    private async syncBulb(room: Room, bulb: Bulb) {
-        const color = await this.getBulbColor(room);
+    private async syncBulb(room: Room, bulb: Bulb): Promise<void> {
 
-        const {r, g, b} = color
-        console.debug('Setting color for room.', {r, g, b, room: room.name, bulb: bulb.label})
+        const now = dayjs();
+        const {currentMeeting, previousMeeting, nextMeeting} = await this._calendarService.getCurrentMeetings(room)
 
-        await bulb.setColor(color)
-    }
-
-    private async getBulbColor(room: Room): Promise<Color> {
-
-        // If it is after the previous meeting, RED
+        // If it is after the previous meeting or the current meeting just ended, RED
         // Otherwise, if it is before end of current meeting, YELLOW
         // Otherwise, if it is during a meeting, GREEN
         // Else off (BLACK)
-        const {currentMeeting, previousMeeting, nextMeeting} = await this._calendarService.getCurrentMeetings(room)
-        const now = dayjs();
-
         if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes
             || currentMeeting && currentMeeting.end.diff(now, 'minute') == 0) {
-            // console.debug('Meeting over!', {roomName, diff: now.diff(previousMeeting.end, 'minute')})
-            return Color.RED;
+            console.debug('Meeting over! Setting bulb to Red.', {room: room.name, bulb: bulb.label})
+            await bulb.setColor(Color.RED)
         } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') <= this._meetingWarningIntervalMinutes) {
-            // console.debug('Meeting ending soon.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
-            return Color.ORANGE;
+            console.debug('Meeting ending soon. Setting bulb to Orange.', {room: room.name, bulb: bulb.label})
+            await bulb.setColor(Color.ORANGE)
         } else if (currentMeeting) {
-            // console.debug('Meeting in progress.', {roomName, diff: currentMeeting.end.diff(now, 'minute')})
-            return Color.GREEN;
+            console.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
+            await bulb.setColor(Color.GREEN)
         } else {
-            // console.debug('No meeting.', {roomName})
-            return Color.BLACK;
+            console.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
+            await bulb.powerOn(false)
         }
 
     }

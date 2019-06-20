@@ -20,4 +20,10 @@ export default class LifxBulb implements Bulb {
         return this._client.setLifxBulbColor(this.id, color);
     }
 
+    async powerOn(on: boolean): Promise<void> {
+        return this._client.setLifxBulbOn(this.id, on);
+    }
+
+
+
 }

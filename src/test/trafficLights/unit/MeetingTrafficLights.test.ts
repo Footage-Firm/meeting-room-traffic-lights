@@ -50,7 +50,7 @@ describe('MeetingTrafficLights Unit Test', () => {
         td.verify(bulbWithMeeting.setColor(Color.GREEN))
         td.verify(bulbEndingSoon.setColor(Color.ORANGE))
         td.verify(bulbEnded.setColor(Color.RED))
-        td.verify(bulbNoMeeting.setColor(Color.BLACK))
+        td.verify(bulbNoMeeting.powerOn(false))
 
     });
 
