@@ -5,12 +5,13 @@ import MagicHomeBulbNetwork from "../src/app/bulbNetworks/magicHome/MagicHomeBul
 import * as path from "path";
 import GoogleCalendarClient from "../src/app/calendar/GoogleCalendarClient";
 import CalendarService from "../src/app/calendar/CalendarService";
+import logger from "../src/app/logger/logger";
 
 main()
 
 async function main() {
 
-    console.info('Starting meeting traffic lights!')
+    logger.info('Starting meeting traffic lights!')
     const lights = new MeetingTrafficLights();
 
     const lifxToken = config.get('lifx.token') as string;

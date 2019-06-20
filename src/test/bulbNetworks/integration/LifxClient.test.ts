@@ -1,6 +1,7 @@
 import LifxClient from '../../../app/bulbNetworks/lifx/client/LifxClient';
 import Color from '../../../app/bulbNetworks/Color';
 import config from 'config';
+import logger from "../../../app/logger/logger";
 
 describe('LifxClient Integration Test', () => {
 
@@ -9,7 +10,7 @@ describe('LifxClient Integration Test', () => {
 
     test('scanForLifxBulbs', async () => {
         const results = await client.scanForLifxBulbs();
-        console.debug('Scan results.', results);
+        logger.debug('Scan results.', results);
         expect(results).toBeInstanceOf(Array);
         expect(results.length).toBeGreaterThan(0);
         expect(results[0].id).toMatch(/[0-9a-f]+/);

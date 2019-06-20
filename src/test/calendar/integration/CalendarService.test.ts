@@ -1,5 +1,6 @@
 import container from "../../../app/inversify.config";
 import CalendarService from "../../../app/calendar/CalendarService";
+import logger from "../../../app/logger/logger";
 
 describe('CalendarService Integration Test', () => {
 
@@ -8,7 +9,7 @@ describe('CalendarService Integration Test', () => {
     test('getCurrentMeetings', async () => {
         const rooms = await calendarService.rooms()
         const room = rooms[Math.floor(Math.random()*rooms.length)]
-        console.debug('Testing room for meetings.', {room})
+        logger.debug('Testing room for meetings.', {room})
         const {currentMeeting, previousMeeting, nextMeeting} = await calendarService.getCurrentMeetings(room)
         expect(currentMeeting).toBeDefined()
         expect(currentMeeting.start).toBeInstanceOf(Date)

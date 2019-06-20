@@ -2,16 +2,19 @@ import {Signale} from 'signale'
 
 
 const options = {
-    disabled: false,
-    interactive: false,
     logLevel: 'debug',
     types: {
-        santa: {
-            badge: '🎅',
-            color: 'red',
-            label: 'santa',
-            logLevel: 'info'
+        debug: {
+            badge: null,
+            label: 'debug',
+            color: 'cyan'
         }
+    },
+    config: {
+        displayTimestamp: true,
+        displayFilename: true,
+        uppercaseLabel: true,
+        underlinePrefix: true
     }
 };
 

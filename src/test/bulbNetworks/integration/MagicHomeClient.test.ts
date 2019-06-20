@@ -1,5 +1,6 @@
 import Color from "../../../app/bulbNetworks/Color";
 import MagicHomeClient from "../../../app/bulbNetworks/magicHome/client/MagicHomeClient";
+import logger from "../../../app/logger/logger";
 
 describe('MagicHomeClient Integration Test', () => {
 
@@ -7,7 +8,7 @@ describe('MagicHomeClient Integration Test', () => {
 
     test('scanForMagicHomeBulbs', async () => {
         const results = await client.scanForMagicHomeBulbs();
-        console.debug('Scan results.', results);
+        logger.debug('Scan results.', results);
         expect(results).toBeInstanceOf(Array)
     });
 
