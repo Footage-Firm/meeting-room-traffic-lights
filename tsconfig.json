@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "es5",
         "esModuleInterop": true,
         "experimentalDecorators": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "downlevelIteration": true,
+        "lib": ["es6"]
     }
 }

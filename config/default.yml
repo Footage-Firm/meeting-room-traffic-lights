@@ -9,7 +9,7 @@ roomBulbLabelOverrides: {
 }
 
 timing:
-  meetingEndIntervalMinutes: 3
+  meetingEndIntervalMinutes: 2
   meetingWarningIntervalMinutes: 5
 
 lifx:

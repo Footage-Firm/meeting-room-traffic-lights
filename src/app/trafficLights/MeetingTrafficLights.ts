@@ -15,8 +15,8 @@ export default class MeetingTrafficLights {
     private _roomBulbMap: Map<Room, Bulb> = new Map<Room, Bulb>();
 
     //Timing
-    private _meetingEndIntervalMinutes: number = 5;
-    private _meetingWarningIntervalMinutes: number = 5;
+    private _meetingEndIntervalMinutes: number = config.get('timing.meetingEndIntervalMinutes');
+    private _meetingWarningIntervalMinutes: number = config.get('timing.meetingWarningIntervalMinutes');
 
     public addNetwork(network: any): void {
         this._networks.push(network)

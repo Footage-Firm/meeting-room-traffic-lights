@@ -1,0 +1,22 @@
+service:
+  name: meeting-room-traffic-lights
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  syncBulbs:
+    handler: bin/Handler.handle
+    name: meeting-room-traffic-lights
+    description: Sets light bulb colors for meeting rooms.
+    events:
+      - schedule:
+          rate: rate(1 minute)
+
+package:
+  include:
+    - config
+
+plugins:
+  - serverless-plugin-typescript

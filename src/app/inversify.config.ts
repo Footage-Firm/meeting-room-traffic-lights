@@ -23,9 +23,15 @@ const container = new Container({skipBaseClassChecks: true});
  */
 import CalendarService from "./calendar/CalendarService";
 import GoogleCalendarClient from "./calendar/GoogleCalendarClient";
+import LifxBulbNetwork from "./bulbNetworks/lifx/LifxBulbNetwork";
 container.bind(CalendarService).toDynamicValue((context: interfaces.Context) => {
     const keyFile = path.resolve(__dirname, '../../', config.get('google.serviceAccountKeyFile'));
     return new CalendarService(new GoogleCalendarClient(keyFile, config.get('google.subject')))
 });
+
+container.bind(LifxBulbNetwork).toDynamicValue(() => {
+    const lifxToken = config.get('lifx.token') as string;
+    return new LifxBulbNetwork(lifxToken);
+})
 
 export default container;
