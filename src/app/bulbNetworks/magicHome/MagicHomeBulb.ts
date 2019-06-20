@@ -20,4 +20,8 @@ export default class MagicHomeBulb implements Bulb {
         return this._client.setMagicHomeBulbColor(this._ip, color);
     }
 
+    async powerOn(on: boolean): Promise<void> {
+        return this._client.setMagicHomeBulbPower(this._ip, on)
+    }
+
 }

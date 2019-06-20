@@ -24,4 +24,14 @@ export default class MagicHomeClient {
         await light.setColorWithBrightness(color.r, color.g, color.b, color.brightness);
     }
 
+    async setMagicHomeBulbPower(bulbIp: string, on: boolean): Promise<void> {
+        const light = new Control(bulbIp, {
+            apply_masks: true,
+            wait_for_reply: false
+        });
+
+        await light.setPower(on)
+    }
+
+
 }

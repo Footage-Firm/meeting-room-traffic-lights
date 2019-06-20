@@ -29,7 +29,7 @@ async function main() {
 
     while (true) {
         await lights.syncBulbs()
-        await sleep(10 * 1000)
+        await sleep(60 * 1000)
     }
 }
 

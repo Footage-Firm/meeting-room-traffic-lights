@@ -20,4 +20,8 @@ describe('LifxClient Integration Test', () => {
         await client.setLifxBulbColor('d073d53c9ba4', Color.RED);
     });
 
+    test('setLifxBulbOn', async () => {
+        await client.setLifxBulbOn('d073d53c9ba4', true);
+    });
+
 });
