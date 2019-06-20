@@ -2,6 +2,7 @@ import dayjs, {Dayjs} from 'dayjs'
 import GoogleCalendarClient from "./GoogleCalendarClient";
 import Room from "./Room";
 import Meeting from "./Meeting";
+import logger from "../logger/logger";
 
 export default class CalendarService {
     constructor(private client: GoogleCalendarClient) {}
@@ -17,7 +18,7 @@ export default class CalendarService {
             const meetings = await this.client.listMeetings(room.email, beginningOfToday);
             return await this.adjacentMeetings(meetings, now)
         } catch (err) {
-            console.warn('Could not get meetings for room: ' + room.name)
+            logger.warn('Could not get meetings for room: ' + room.name)
             return {}
         }
     }

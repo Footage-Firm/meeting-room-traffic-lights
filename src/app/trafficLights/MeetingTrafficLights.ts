@@ -6,6 +6,7 @@ import Meeting from "../calendar/Meeting";
 import Color from "../bulbNetworks/Color";
 import BulbNetwork from "../bulbNetworks/BulbNetwork";
 import Bulb from "../bulbNetworks/Bulb";
+import logger from "../logger/logger";
 
 export default class MeetingTrafficLights {
 
@@ -65,16 +66,16 @@ export default class MeetingTrafficLights {
         // Else off (BLACK)
         if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes
             || currentMeeting && currentMeeting.end.diff(now, 'minute') == 0) {
-            console.debug('Meeting over! Setting bulb to Red.', {room: room.name, bulb: bulb.label})
+            logger.debug('Meeting over! Setting bulb to Red.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.RED)
         } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') <= this._meetingWarningIntervalMinutes) {
-            console.debug('Meeting ending soon. Setting bulb to Orange.', {room: room.name, bulb: bulb.label})
+            logger.debug('Meeting ending soon. Setting bulb to Orange.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.ORANGE)
         } else if (currentMeeting) {
-            console.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
+            logger.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.GREEN)
         } else {
-            console.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
+            logger.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
             await bulb.powerOn(false)
         }
 
@@ -117,7 +118,7 @@ export default class MeetingTrafficLights {
             }
 
             if (roomBulb) {
-                console.debug('Mapping room to bulb.', {room, bulb: roomBulb})
+                logger.debug('Mapping room to bulb.', {room, bulb: roomBulb})
                 this._roomBulbMap.set(room, roomBulb)
             }
 

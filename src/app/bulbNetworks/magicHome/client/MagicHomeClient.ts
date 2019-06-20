@@ -1,21 +1,22 @@
 import {Discovery, Control} from 'magic-home'
 import Color from "../../Color";
 import MagicHomeBulbInfo from "./MagicHomeBulbInfo";
+import logger from "../../../logger/logger";
 
 export default class MagicHomeClient {
 
     async scanForMagicHomeBulbs(): Promise<MagicHomeBulbInfo[]> {
         const seconds = 3
-        console.debug('Scanning for Magic Home bulbNetworks...', {seconds});
+        logger.debug('Scanning for Magic Home bulbNetworks...', {seconds});
         const discovery = new Discovery();
         const results = await discovery.scan(seconds * 1000);
         const bulbs = (results || []).map(r => new MagicHomeBulbInfo(r.id, r.address));
-        console.debug('Found Magic Home bulbNetworks', bulbs);
+        logger.debug('Found Magic Home bulbNetworks', bulbs);
         return bulbs;
     }
 
     async setMagicHomeBulbColor(bulbIp: string, color: Color): Promise<void> {
-        // console.debug('Changing color for Magic Home bulb', bulbIp, color);
+        // logger.debug('Changing color for Magic Home bulb', bulbIp, color);
         const light = new Control(bulbIp, {
             apply_masks: true,
             wait_for_reply: false

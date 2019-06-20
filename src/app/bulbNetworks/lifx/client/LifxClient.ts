@@ -1,6 +1,7 @@
 import Color from '../../Color';
 import axios from 'axios';
 import LifxClientBulbInfo from "./LifxClientBulbInfo";
+import logger from "../../../logger/logger";
 
 
 export default class LifxClient {
@@ -16,16 +17,16 @@ export default class LifxClient {
     }
 
     async scanForLifxBulbs(): Promise<LifxClientBulbInfo[]> {
-        console.debug('Scanning for LIFX bulbNetworks');
+        logger.debug('Scanning for LIFX bulbNetworks');
         const url = 'https://api.lifx.com/v1/lights/all';
         const response = await axios.get(url, this.axiosDefaultConfig);
         const bulbs = (response.data || []).filter(d => d.connected).map(d => new LifxClientBulbInfo(d.id, d.label));
-        console.debug('Found LIFX bulbNetworks', bulbs);
+        logger.debug('Found LIFX bulbNetworks', bulbs);
         return bulbs;
     }
 
     async setLifxBulbColor(bulbId: string, color: Color): Promise<void> {
-        // console.debug('Changing color for LIFX bulb', {bulbId, color});
+        // logger.debug('Changing color for LIFX bulb', {bulbId, color});
         const url = `https://api.lifx.com/v1/lights/id:${bulbId}/state`;
         const data = {
             power: 'on',
