@@ -16,5 +16,5 @@ export const handle: Handler =  async (event: ScheduledEvent, context: Context) 
     const calendarService = container.get(CalendarService)
     lights.setCalendar(calendarService)
 
-    await lights.syncBulbs()
+    return await lights.syncBulbs()
 };
