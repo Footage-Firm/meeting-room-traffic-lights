@@ -7,7 +7,7 @@ provider:
 
 functions:
   syncBulbs:
-    handler: bin/Handler.handle
+    handler: bin/Handler.syncBulbs
     name: meeting-room-traffic-lights
     description: Sets light bulb colors for meeting rooms.
     events:
