@@ -54,6 +54,25 @@ describe('MeetingTrafficLights Unit Test', () => {
 
     });
 
+    test('cycleOff', async () => {
+
+        // Configure mocks
+        const bulbs = Factory.dummyBulbs([{label: 'one'}, {label: 'two'}])
+        const rooms = Factory.dummyRooms([{name: 'One!'}, {name: 'Two'}])
+
+        td.when(mockNetwork.scanForBulbs()).thenResolve(bulbs);
+        td.when(mockCalendarService.rooms()).thenResolve(rooms);
+
+        // Call test method
+        await app.cycleOff()
+
+        // Verify results
+        const [bulbOne, bulbTwo] = bulbs;
+        td.verify(bulbOne.powerOn(false))
+        td.verify(bulbTwo.powerOn(false))
+
+    });
+
     function mockDependencies() {
         mockNetwork = td.object<BulbNetwork>();
         mockCalendarService = new (td.imitate(CalendarService))()

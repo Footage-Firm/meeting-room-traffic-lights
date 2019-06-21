@@ -7,12 +7,19 @@ provider:
 
 functions:
   syncBulbs:
-    handler: bin/Handler.handle
-    name: meeting-room-traffic-lights
-    description: Sets light bulb colors for meeting rooms.
+    handler: bin/Handler.syncBulbs
+    name: sync-bulbs
+    description: Sets light bulb colors for meeting rooms during weekday business hours (12-24 GMT).
     events:
       - schedule:
-          rate: rate(1 minute)
+          rate: cron(* 12-24 ? * MON-FRI *) # cron(Minutes Hours Day-of-month Month Day-of-week Year)
+  cycleOff:
+    handler: bin/Handler.cycleOff
+    name: cycle-off
+    description: Turn off the bulbs at the end of the day during weekdays (23:55 GMT).
+    events:
+      - schedule:
+          rate: cron(55 23 ? * MON-FRI *)
 
 package:
   include:

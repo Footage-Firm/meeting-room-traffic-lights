@@ -41,6 +41,22 @@ export default class MeetingTrafficLights {
         await Promise.all(promises)
     }
 
+    public async cycleOff(): Promise<void> {
+        if (!this._roomBulbMap.size) {
+            await this.mapBulbsToRooms();
+        }
+
+        const promises = []
+        for (let room of this._roomBulbMap.keys()) {
+            const bulb = this._roomBulbMap.get(room)
+            logger.info('Cycling bulb off.', {room: room.name, bulb: bulb.label})
+            promises.push(bulb.powerOn(false))
+        }
+
+        await Promise.all(promises)
+
+    }
+
     public async scan() {
         for (let network of this._networks) {
             await network.scanForBulbs()
@@ -118,7 +134,7 @@ export default class MeetingTrafficLights {
             }
 
             if (roomBulb) {
-                logger.debug('Mapping room to bulb.', {room, bulb: roomBulb})
+                logger.debug('Mapping room to bulb.', {room: room.name, bulb: roomBulb.label})
                 this._roomBulbMap.set(room, roomBulb)
             }
 
