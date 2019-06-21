@@ -41,6 +41,21 @@ export default class MeetingTrafficLights {
         await Promise.all(promises)
     }
 
+    public async cycleOff(): Promise<void> {
+        if (!this._roomBulbMap.size) {
+            await this.mapBulbsToRooms();
+        }
+
+        const promises = []
+        for (let room of this._roomBulbMap.keys()) {
+            const bulb = this._roomBulbMap.get(room)
+            promises.push(bulb.powerOn(false))
+        }
+
+        await Promise.all(promises)
+
+    }
+
     public async scan() {
         for (let network of this._networks) {
             await network.scanForBulbs()
