@@ -49,6 +49,7 @@ export default class MeetingTrafficLights {
         const promises = []
         for (let room of this._roomBulbMap.keys()) {
             const bulb = this._roomBulbMap.get(room)
+            logger.info('Cycling bulb off.', {room: room.name, bulb: bulb.label})
             promises.push(bulb.powerOn(false))
         }
 
@@ -133,7 +134,7 @@ export default class MeetingTrafficLights {
             }
 
             if (roomBulb) {
-                logger.debug('Mapping room to bulb.', {room, bulb: roomBulb})
+                logger.debug('Mapping room to bulb.', {room: room.name, bulb: roomBulb.label})
                 this._roomBulbMap.set(room, roomBulb)
             }
 

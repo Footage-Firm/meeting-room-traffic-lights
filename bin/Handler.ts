@@ -30,5 +30,5 @@ export const cycleOff: Handler =  async (event: ScheduledEvent, context: Context
     const calendarService = container.get(CalendarService)
     lights.setCalendar(calendarService)
 
-    return await lights.syncBulbs()
+    return await lights.cycleOff()
 };
