@@ -12,14 +12,14 @@ functions:
     description: Sets light bulb colors for meeting rooms during weekday business hours (12-24 GMT).
     events:
       - schedule:
-          rate: cron(* 12-24 ? * MON-FRI *) # cron(Minutes Hours Day-of-month Month Day-of-week Year)
+          rate: cron(* 12-23 ? * 2-6 *) # cron(Minutes Hours Day-of-month Month Day-of-week Year)
   cycleOff:
     handler: bin/Handler.cycleOff
     name: cycle-off
-    description: Turn off the bulbs at the end of the day during weekdays (23:55 GMT).
+    description: Turn off the bulbs at the end of the day during weekdays (24:00 GMT).
     events:
       - schedule:
-          rate: cron(55 23 ? * MON-FRI *)
+          rate: cron(0 0 ? * 3-7 *)
 
 package:
   include:
