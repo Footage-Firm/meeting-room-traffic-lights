@@ -1,6 +1,5 @@
 ---
 google:
-  timezone: GOOGLE_CALENDAR_TIMEZONE
   subject: GOOGLE_CALENDAR_SUBJECT
 
 lifx:
