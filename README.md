@@ -1,6 +1,8 @@
 # Meeting Room Traffic Lights
 
-A simple and fun way to show the status of meeting rooms! :traffic_light:
+:traffic_light: :bulb:
+
+A simple and fun way to show the status of meeting rooms!
 
 ![Whiteboard Illustration](docs/images/meeting_lights_whiteboard.jpg)
 
