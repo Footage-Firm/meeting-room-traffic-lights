@@ -2,7 +2,6 @@ import dayjs from "dayjs";
 import * as td from 'testdouble'
 import container from "../../../app/inversify.config";
 import CalendarService from "../../../app/calendar/CalendarService";
-import GoogleCalendarClient from "../../../app/calendar/GoogleCalendarClient";
 import Factory from "../../tools/Factory";
 import MeetingTrafficLights from "../../../app/trafficLights/MeetingTrafficLights";
 import BulbNetwork from "../../../app/bulbNetworks/BulbNetwork";
@@ -16,7 +15,7 @@ describe('MeetingTrafficLights Unit Test', () => {
     let mockNetwork: BulbNetwork;
     let mockCalendarService: CalendarService;
 
-    beforeAll(mockDependencies);
+    beforeEach(mockDependencies);
     afterAll(container.restore);
     afterEach(td.reset);
 

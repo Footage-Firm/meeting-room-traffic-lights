@@ -1,1 +1,6 @@
 ---
+google:
+  subject: GOOGLE_CALENDAR_SUBJECT
+
+lifx:
+  token: LIFX_TOKEN
