@@ -72,16 +72,14 @@ You also need to get a [LIFX API Token](https://api.developer.lifx.com/), which 
 
 #### Extending the Application
 
-Feel free to fork the repo and add support for different bulb types or new features.
-
-To use different bulb types, just implement the _Bulb_ and _BulbNetwork_ interfaces (see _src/app/bulbNetworks/_).
-
+Feel free to fork the repo and add support for different bulb types or new features. 
+To use different bulb types, just implement the _Bulb_ and _BulbNetwork_ interfaces (see _src/app/bulbNetworks/_). 
 To use different calendar sources, implement a new calendar client with the same interface as _GoogleCalendarClient_.
-
-#### Installing on a LAN
-
-You can also run the application from a Raspberry Pi inside of your network.
 
 #### Overriding Bulb Labels
 
 If you are unable to map light bulb label to room name (such as when using MagicHome bulbs), you can also create a _config/local.yml_ file and set the `roomBulbLabelOverrides` property. That maps room name (key) to bulb label (value) and overrides the auto-mapping.
+
+#### Installing on a LAN
+
+You can also run the application from a Raspberry Pi inside of your network. This can be useful if using bulbs that can only be contolled via LAN (i.e. MagicHome bulbs).
