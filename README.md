@@ -12,10 +12,10 @@ If so, Meeting Traffic Lights are the solution for you! Just buy some smart ligh
 
 ## Requirements
 
-- Meeting Rooms listed as Resources in Google Calendar ([more](https://support.google.com/a/answer/1686462))
+- Meeting Rooms defined as resources in Google Calendar ([more](https://support.google.com/a/answer/1686462))
 - A Google Cloud Service Account 
     - Needs the following scopes: _calendar.readonly_, _admin.directory.resource.calendar.readonly_
-    - Uses a `service_account_key.json` file
+    - Need a valid `service_account_key.json` file.
     - May require admin access to your organization's G Suite account.
 - An AWS Account
     - With credentials to deploy a [serverless](https://serverless.com/) application to AWS Lambda.
@@ -31,7 +31,7 @@ A "service account" is used to communicate with the Google Calendar API. Their [
 1. Create a project in the Google APIs [dashboard](https://console.developers.google.com/apis/dashboard) to hold the service account.
 1. Create the service account in the [IAM & admin](https://console.developers.google.com/iam-admin/serviceaccounts) section of your project.
 1. Delegate domain-wide authority to the service account.
-1. Log into the G Suite [Admin](http://admin.google.com/) section (as an admin user) to authorize the service account for API scopes. For listing calendar information, you need the _calendar.readonly_ scope: `https://www.googleapis.com/auth/calendar.readonly`. For listing users and rooms in the domain, you need the _admin.directory.user.readonly_ scope: `https://www.googleapis.com/auth/admin.directory.user.readonly`.
+1. Log into the G Suite [Admin](http://admin.google.com/) section (as an admin user) to authorize the service account for API scopes. For listing calendar information, you need the _calendar.readonly_ scope: `https://www.googleapis.com/auth/calendar.readonly`. For listing users and rooms in the domain, you need the _admin.directory.resource.calendar.readonly_ scope: `https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly`.
 1. Go to the [credentials page](https://console.developers.google.com/apis/credentials) in the Google APIs dashboard for your project, click **Create credentials > Service account key**, select your service account and JSON as the key type, and click **Create**. This will download your credentials JSON file containing your private key which will be used in Google API SDKs.                                                                                                                                                                                                                                                                                                                                                                         
 
 To connect, place your `service_account_key.json` file inside this application's _config/_ directory (it is git-ignored).
