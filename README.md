@@ -71,6 +71,7 @@ Installing the bulbs is simple! We used the [LIFX Mini Color](https://www.lifx.c
 For example, we synced a bulb to our meeting room called "The Studio" (in Google Calendar) by labeling the bulb "Studio" (it matches based on substring):
 
 ![The Studio](./docs/images/studio_pic.jpg)
+![Google Calendar](./docs/images/calendar_screenshot.png)
 
 You also need to get a [LIFX API Token](https://api.developer.lifx.com/), which is set via the `LIFX_TOKEN` environment variable. This lets the application remotely control the bulbs.
 
