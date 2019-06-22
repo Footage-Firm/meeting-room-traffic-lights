@@ -1,6 +1,6 @@
 # Meeting Room Traffic Lights
 
-A simple and fun way to show the status of meeting rooms.
+A simple and fun way to show the status of meeting rooms! :traffic_light:
 
 ![Whiteboard Illustration](docs/images/meeting_lights_whiteboard.jpg)
 
@@ -8,7 +8,7 @@ Do meetings always run long in your company? Do you find yourself waiting outsid
 
 If so, Meeting Traffic Lights are the solution for you! Just buy some smart lightbulbs and stands, and run this app to synchronize the light bulbs with your meeting rooms.
 
-:traffic_light: Off == No meeting. Green == Active meeting. Orange == Meeting almost over. Red == Meeting over. :traffic_light:
+:bulb: Off == No meeting. Green == Active meeting. Orange == Meeting almost over. Red == Meeting over. :bulb:
 
 ## Requirements
 
