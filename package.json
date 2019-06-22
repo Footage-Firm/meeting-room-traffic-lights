@@ -47,6 +47,7 @@
     "typescript": "^3.5.1"
   },
   "jest": {
-    "preset": "ts-jest"
+    "preset": "ts-jest",
+    "testPathIgnorePatterns": ["/node_modules/", "/deactivated/"]
   }
 }
