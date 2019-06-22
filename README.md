@@ -6,7 +6,9 @@ A simple and fun way to show the status of meeting rooms.
 
 Do meetings always run long in your company? Do you find yourself waiting outside of a meeting room wishing your coworkers would wrap it up? Do you wish there was a simple way to look at a meeting room and know if it is booked? Do you just want a fun way to spruce up your boring meeting rooms?
 
-If so, Meeting Traffic Lights are the solution for you! Just buy some smart lightbulbs and stands, and run this app to 
+If so, Meeting Traffic Lights are the solution for you! Just buy some smart lightbulbs and stands, and run this app to synchronize the light bulbs with your meeting rooms.
+
+:traffic_light: Off == No meeting. Green == Active meeting. Orange == Meeting almost over. Red == Meeting over. :traffic_light:
 
 ## Requirements
 
@@ -38,14 +40,6 @@ To connect, place your `service_account_key.json` file inside this application's
 
 Lastly, you will need to choose a "subject" to query Google Calendar, which is the email address of a user in your organization who can see the calendars of your meeting rooms (I used mine). This is set via the `GOOGLE_CALENDAR_SUBJECT` environment variable.
 
-### Deploying the Application
-
-Deploys are done using [serverless](https://github.com/serverless/serverless). You just need to run the deploy command in an environment with valid AWS credentials and permissions to deploy the serverless stack to Lambda.
-
-```bash
-serverless deploy       # Deploy using serverless
-```
-
 ### Configuration
 You MUST put a valid Google _service_account_key.json_ file in the _config/_ directory.
 
@@ -56,6 +50,8 @@ The following configs are set via environment variables or a _config/local.yml_ 
 - LIFX_TOKEN
     - (required) If using LIFX bulbs, this is required to control the lightbulbs over the itnernet. 
 
+The schedules for the serverless functions are set in _serverless.yml_ and are currently set for US East Coast time. Just change the `cron(...)` GMT times to a schedule that makes sense for your timezone.
+
 ### Installing the Bulbs
 
 Installing the bulbs is simple! We used the [LIFX Mini Color](https://www.lifx.com/collections/featured-products/products/lifx-mini-color-e26) bulb, and the [INJUICY](https://www.amazon.com/gp/product/B01FZKKTU0) bulb stands. The application will automatically pair rooms to bulbs based on the label you give the bulb in the [LIFX phone app](https://www.lifx.com/pages/go).
@@ -65,6 +61,14 @@ For example, we synced a bulb to our meeting room called "The Studio" (in Google
 ![The Studio](./docs/images/studio_pic.jpg)
 
 You also need to get a [LIFX API Token](https://api.developer.lifx.com/), which is set via the `LIFX_TOKEN` environment variable. This lets the application remotely control the bulbs.
+
+### Deploying the Application
+
+Deploys are done using [serverless](https://github.com/serverless/serverless). You just need to run the deploy command in an environment with valid AWS credentials and permissions to deploy the serverless stack to Lambda.
+
+```bash
+serverless deploy       # Deploy using serverless
+```
 
 ---
 
