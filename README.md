@@ -23,6 +23,7 @@ If so, Meeting Traffic Lights are the solution for you! Just buy some smart ligh
     - With credentials to deploy a [serverless](https://serverless.com/) application to AWS Lambda.
 - LIFX RGB Smart Lightbulbs (plus stands/lamps)
 - A LIFX Api Token
+- A 2.4 GHz WiFi network
 
 ## Setup
 
