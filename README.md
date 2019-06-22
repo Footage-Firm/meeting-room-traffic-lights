@@ -1,6 +1,6 @@
 # Meeting Room Traffic Lights
 
-:traffic_light: :bulb:
+:bulb: :traffic_light:
 
 A simple and fun way to show the status of meeting rooms!
 
