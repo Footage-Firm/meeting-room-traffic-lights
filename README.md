@@ -24,6 +24,15 @@ If so, Meeting Traffic Lights are the solution for you! Just buy some smart ligh
 
 ## Setup
 
+```
+# Clone the repo, then install dependencies.
+npm install
+
+# Integration tests will fail without a working LIFX bulb, LIFX API token, and service_account_key.json file.
+# See configuration instructions below.
+npm run test
+```
+
 ### Preparing Google Calendar
 
 A "service account" is used to communicate with the Google Calendar API. Their [documentation](https://developers.google.com/identity/protocols/OAuth2ServiceAccount) best describes how to do this. The basic steps I took were the following:
