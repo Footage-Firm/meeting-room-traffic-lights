@@ -99,4 +99,4 @@ If you are unable to map light bulb label to room name (such as when using Magic
 
 #### Installing on a LAN
 
-You can also run the application from a Raspberry Pi inside of your network. This can be useful if using bulbs that can only be contolled via LAN (i.e. MagicHome bulbs).
+You can also run the application from a Raspberry Pi inside of your network. This can be useful if using bulbs that can only be controlled via LAN (i.e. MagicHome bulbs). Just modify the _bin/main.ts_ file and run that.
