@@ -19,6 +19,10 @@ export default class Color {
         return this._brightness;
     }
 
+    get brightnessFraction(): string {
+        return Math.max(Math.min(this._brightness / 100, 1.0), 0.0).toFixed(2)
+    }
+
     static get PURPLE(): Color {
         return new this(255, 0, 255)
     }
@@ -29,6 +33,14 @@ export default class Color {
 
     static get RED(): Color {
         return new this(255, 0, 0)
+    }
+
+    static get RED_SOFT(): Color {
+        return new this(255, 0, 0, 10)
+    }
+
+    static get RED_BRIGHT(): Color {
+        return new this(255, 0, 0, 40)
     }
 
     static get YELLOW(): Color {
@@ -45,6 +57,10 @@ export default class Color {
 
     static get GREEN_SOFT(): Color {
         return new this(0, 255, 0, 10)
+    }
+
+    static get GREEN_BRIGHT(): Color {
+        return new this(0, 255, 0, 40)
     }
 
     static get BLUE(): Color {

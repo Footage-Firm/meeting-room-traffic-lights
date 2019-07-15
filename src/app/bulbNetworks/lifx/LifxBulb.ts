@@ -5,7 +5,6 @@ import Color from "../Color";
 export default class LifxBulb implements Bulb {
 
     constructor(private _client: LifxClient, private _id, private _label: string) {
-
     }
 
     get id(): string {
@@ -22,6 +21,10 @@ export default class LifxBulb implements Bulb {
 
     async powerOn(on: boolean): Promise<void> {
         return this._client.setLifxBulbOn(this.id, on);
+    }
+
+    async pulse(color: Color): Promise<void> {
+        return this._client.setLifxBulbPulse(this.id, color);
     }
 
 

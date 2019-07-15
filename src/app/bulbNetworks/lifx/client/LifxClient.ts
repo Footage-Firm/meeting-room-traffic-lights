@@ -30,8 +30,7 @@ export default class LifxClient {
         const url = `https://api.lifx.com/v1/lights/id:${bulbId}/state`;
         const data = {
             power: 'on',
-            brightness: Math.max(Math.min(color.brightness / 100, 1.0), 0.0),
-            color: `rgb:${color.r},${color.g},${color.b}`
+            color: `rgb:${color.r},${color.g},${color.b} brightness:${color.brightnessFraction}`
         };
         const response = await axios.put(url, data, this.axiosDefaultConfig);
     }
@@ -42,6 +41,18 @@ export default class LifxClient {
             power: 'off'
         };
         const response = await axios.put(url, data, this.axiosDefaultConfig);
+    }
+
+    async setLifxBulbPulse(bulbId: string, color: Color, min: number = 1): Promise<void> {
+        const url = `https://api.lifx.com/v1/lights/id:${bulbId}/effects/breathe`;
+        const periodSec = 5;
+        const data = {
+            color: `rgb:${color.r},${color.g},${color.b} brightness:${color.brightnessFraction}`,
+            from_color: `rgb:${color.r},${color.g},${color.b} brightness:0.01`,
+            period: periodSec,
+            cycles: Math.round(min / (periodSec/60))
+        };
+        const response = await axios.post(url, data, this.axiosDefaultConfig);
     }
 
 }
