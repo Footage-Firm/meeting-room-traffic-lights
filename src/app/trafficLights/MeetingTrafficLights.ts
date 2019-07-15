@@ -15,8 +15,9 @@ export default class MeetingTrafficLights {
     private _roomBulbMap: Map<Room, Bulb> = new Map<Room, Bulb>();
 
     //Timing
-    private _meetingEndIntervalMinutes: number = config.get('timing.meetingEndIntervalMinutes');
-    private _meetingWarningIntervalMinutes: number = config.get('timing.meetingWarningIntervalMinutes');
+    private _startIntervalMin: number = config.get('meetingIntervalMin.start');
+    private _warnIntervalMin: number = config.get('meetingIntervalMin.warn');
+    private _endIntervalMin: number = config.get('meetingIntervalMin.end');
 
     public addNetwork(network: any): void {
         this._networks.push(network)
@@ -64,11 +65,11 @@ export default class MeetingTrafficLights {
     }
 
     public setMeetingEndIntervalMinutes(value: number) {
-        this._meetingEndIntervalMinutes = value;
+        this._endIntervalMin = value;
     }
 
     public setMeetingWarningIntervalMinutes(value: number) {
-        this._meetingWarningIntervalMinutes = value;
+        this._warnIntervalMin = value;
     }
 
     private async syncBulb(room: Room, bulb: Bulb): Promise<void> {
@@ -76,20 +77,27 @@ export default class MeetingTrafficLights {
         const now = dayjs();
         const {currentMeeting, previousMeeting, nextMeeting} = await this._calendarService.getCurrentMeetings(room)
 
-        // If it is after the previous meeting or the current meeting just ended, RED
-        // Otherwise, if it is before end of current meeting, YELLOW
-        // Otherwise, if it is during a meeting, GREEN
-        // Else off (BLACK)
-        if (previousMeeting && now.diff(previousMeeting.end, 'minute') <= this._meetingEndIntervalMinutes
+        /**
+         * If it is after the previous meeting or the current meeting just ended, red
+         * Otherwise, if it is before end of current meeting, orange
+         * Otherwise, if it is during a meeting, green or soft-green
+         * Else off
+         *
+         * Example meeting timeline:
+         * (t) ....start.............................end.......
+         *          |      |                   |      |    |
+         *        green  soft-green          orange  red  off
+         */
+        if (previousMeeting && now.diff(previousMeeting.end, 'minute') < this._endIntervalMin
             || currentMeeting && currentMeeting.end.diff(now, 'minute') == 0) {
             logger.debug('Meeting over! Setting bulb to Red.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.RED)
-        } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') <= this._meetingWarningIntervalMinutes) {
+        } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') < this._warnIntervalMin) {
             logger.debug('Meeting ending soon. Setting bulb to Orange.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.ORANGE)
         } else if (currentMeeting) {
             logger.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
-            const color = now.diff(currentMeeting.start, 'minute') < 1 ? Color.GREEN : Color.GREEN_SOFT
+            const color = now.diff(currentMeeting.start, 'minute') < this._startIntervalMin ? Color.GREEN : Color.GREEN_SOFT
             await bulb.setColor(color)
         } else {
             logger.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})

@@ -32,17 +32,19 @@ describe('MeetingTrafficLights Unit Test', () => {
         td.when(mockNetwork.scanForBulbs()).thenResolve(bulbs);
         td.when(mockCalendarService.rooms()).thenResolve(rooms);
         td.when(mockCalendarService.getCurrentMeetings(roomWithMeeting)).thenResolve({
-            currentMeeting: Factory.dummyMeeting({location: roomWithMeeting})
+            currentMeeting: Factory.dummyMeeting({location: roomWithMeeting, start: now.subtract(6, 'minute'), end: now.add(5, 'minute').add(1, 'second')})
         });
         td.when(mockCalendarService.getCurrentMeetings(roomEndingSoon)).thenResolve({
             currentMeeting: Factory.dummyMeeting({location: roomEndingSoon, end: now.add(5, 'minute')})
         });
         td.when(mockCalendarService.getCurrentMeetings(roomEnded)).thenResolve({
-            currentMeeting: Factory.dummyMeeting({location: roomEnded, end: now})
+            currentMeeting: Factory.dummyMeeting({location: roomEnded, end: now.subtract(1, 'second')})
         });
-        td.when(mockCalendarService.getCurrentMeetings(roomNoMeeting)).thenResolve({});
+        td.when(mockCalendarService.getCurrentMeetings(roomNoMeeting)).thenResolve({
+            previousMeeting: Factory.dummyMeeting({location: roomNoMeeting, end: now.subtract(2, 'minute').subtract(1, 'second')})
+        });
         td.when(mockCalendarService.getCurrentMeetings(roomJustStarted)).thenResolve({
-            currentMeeting: Factory.dummyMeeting({location: roomJustStarted, start: now.add(20, 'second')})
+            currentMeeting: Factory.dummyMeeting({location: roomJustStarted, start: now.subtract(1, 'second')})
         });
 
         // Call test method

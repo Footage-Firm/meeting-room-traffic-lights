@@ -7,9 +7,10 @@ roomBulbLabelOverrides: {
   roomOne: '...bulb.id'
 }
 
-timing:
-  meetingEndIntervalMinutes: 2
-  meetingWarningIntervalMinutes: 5
+meetingIntervalMin:
+  start: 3
+  warn: 5
+  end: 2
 
 lifx:
   token: '...'
