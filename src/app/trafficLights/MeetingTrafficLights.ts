@@ -89,7 +89,8 @@ export default class MeetingTrafficLights {
             await bulb.setColor(Color.ORANGE)
         } else if (currentMeeting) {
             logger.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
-            await bulb.setColor(Color.GREEN)
+            const color = now.diff(currentMeeting.start, 'minute') < 1 ? Color.GREEN : Color.GREEN_SOFT
+            await bulb.setColor(color)
         } else {
             logger.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
             await bulb.powerOn(false)

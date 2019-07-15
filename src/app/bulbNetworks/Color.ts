@@ -43,6 +43,10 @@ export default class Color {
         return new this(0, 255, 0)
     }
 
+    static get GREEN_SOFT(): Color {
+        return new this(0, 255, 0, 10)
+    }
+
     static get BLUE(): Color {
         return new this(0, 0, 255)
     }
