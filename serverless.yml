@@ -10,6 +10,7 @@ functions:
     handler: bin/Handler.syncBulbs
     name: sync-bulbs
     description: Sets light bulb colors for meeting rooms during weekday business hours (12-24 GMT).
+    memorySize: 512
     events:
       - schedule:
           rate: cron(* 12-23 ? * 2-6 *) # cron(Minutes Hours Day-of-month Month Day-of-week Year)
@@ -17,6 +18,7 @@ functions:
     handler: bin/Handler.cycleOff
     name: cycle-off
     description: Turn off the bulbs at the end of the day during weekdays (24:00 GMT).
+    memorySize: 512
     events:
       - schedule:
           rate: cron(0 0 ? * 3-7 *)
