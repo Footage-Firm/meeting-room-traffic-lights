@@ -97,23 +97,23 @@ export default class MeetingTrafficLights {
         const nextMeetingStarting = nextMeeting && nextMeeting.start.diff(now, 'm') == 0
 
         if (config.get('pulse.onEnd') && ((previousMeetingJustEnded && currentMeeting) || (currentMeetingEnded && nextMeetingStarting))) {
-            logger.debug('Meeting over, time to get out! Pulsing Red.', {room: room.name, bulb: bulb.label})
+            logger.note('Meeting over, time to get out! Pulsing Red.', {room: room.name, bulb: bulb.label})
             await bulb.pulse(Color.RED)
         } else if (previousMeetingJustEnded || currentMeetingEnded) {
-            logger.debug('Meeting over. Setting color to Red.', {room: room.name, bulb: bulb.label})
+            logger.info('Meeting over. Setting color to Red.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.RED)
         } else if (currentMeetingEndingSoon) {
-            logger.debug('Meeting ending soon. Setting color to Orange.', {room: room.name, bulb: bulb.label})
+            logger.info('Meeting ending soon. Setting color to Orange.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.ORANGE)
         } else if (currentMeetingJustStarted) {
             const pulse = config.get('pulse.onStart')
-            logger.debug(`Meeting just started. ${pulse ? 'Pulsing' : 'Setting color to'} Green.`, {room: room.name, bulb: bulb.label})
+            logger.info(`Meeting just started. ${pulse ? 'Pulsing' : 'Setting color to'} Green.`, {room: room.name, bulb: bulb.label})
             pulse ? await bulb.pulse(Color.GREEN) : await bulb.setColor(Color.GREEN)
         } else if (currentMeeting) {
-            logger.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
+            logger.info('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.GREEN_SOFT)
         } else {
-            logger.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
+            logger.info('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
             await bulb.powerOn(false)
         }
 

@@ -3,6 +3,9 @@ google:
   serviceAccountKeyFile: 'config/service_account_key.json'
   subject: '...@gmail.com'
 
+lifx:
+  token: '...'
+
 roomBulbLabelOverrides: {
   roomOne: '...bulb.id'
 }
@@ -16,5 +19,5 @@ pulse:
   onStart: true
   onEnd: true
 
-lifx:
-  token: '...'
+log:
+  level: warn
