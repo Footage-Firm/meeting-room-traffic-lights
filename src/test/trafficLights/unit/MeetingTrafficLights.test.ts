@@ -21,7 +21,46 @@ describe('MeetingTrafficLights Unit Test', () => {
     afterAll(container.restore);
     afterEach(td.reset);
 
-    describe('syncBulbs', () => {
+    test('syncBulbs', async () => {
+        const now = dayjs()
+
+        // Configure mocks
+        const bulbs = Factory.dummyBulbs([{label: 'meeting exists'}, {label: 'ending soon'}, {label: 'GTfo'}, {label: 'no meetings'}, {label: 'just started'}])
+        const [bulbWithMeeting, bulbEndingSoon, bulbEnded, bulbNoMeeting, bulbJustStarted] = bulbs;
+        const rooms = Factory.dummyRooms([{name: 'Meeting exists!'}, {name: 'Ending Soon...'}, {name: 'GTFO'}, {name: 'no meetings here'}, {name: 'just started'}])
+        const [roomWithMeeting, roomEndingSoon, roomEnded, roomNoMeeting, roomJustStarted] = rooms;
+
+        td.when(mockNetwork.scanForBulbs()).thenResolve(bulbs);
+        td.when(mockCalendarService.rooms()).thenResolve(rooms);
+        td.when(mockCalendarService.getCurrentMeetings(roomWithMeeting)).thenResolve({
+            currentMeeting: Factory.dummyMeeting({location: roomWithMeeting, start: now.subtract(6, 'minute'), end: now.add(5, 'minute').add(1, 'second')})
+        });
+        td.when(mockCalendarService.getCurrentMeetings(roomEndingSoon)).thenResolve({
+            currentMeeting: Factory.dummyMeeting({location: roomEndingSoon, end: now.add(5, 'minute')})
+        });
+        td.when(mockCalendarService.getCurrentMeetings(roomEnded)).thenResolve({
+            currentMeeting: Factory.dummyMeeting({location: roomEnded, end: now.subtract(1, 'second')})
+        });
+        td.when(mockCalendarService.getCurrentMeetings(roomNoMeeting)).thenResolve({
+            previousMeeting: Factory.dummyMeeting({location: roomNoMeeting, end: now.subtract(2, 'minute').subtract(1, 'second')})
+        });
+        td.when(mockCalendarService.getCurrentMeetings(roomJustStarted)).thenResolve({
+            currentMeeting: Factory.dummyMeeting({location: roomJustStarted, start: now.subtract(1, 'second')})
+        });
+
+        // Call test method
+        await app.syncBulbs()
+
+        // Verify results
+        td.verify(bulbWithMeeting.setColor(Color.GREEN_SOFT))
+        td.verify(bulbEndingSoon.setColor(Color.ORANGE))
+        td.verify(bulbEnded.setColor(Color.RED))
+        td.verify(bulbNoMeeting.powerOn(false))
+        td.verify(bulbJustStarted.pulse(Color.GREEN))
+
+    })
+
+    describe('syncBulbs scenarios', () => {
 
         let bulb: Bulb, room: Room, now: Dayjs;
         afterEach(td.reset)
@@ -60,11 +99,20 @@ describe('MeetingTrafficLights Unit Test', () => {
 
         test('meeting just ended, next meeting', async () => {
             td.when(mockCalendarService.getCurrentMeetings(room)).thenResolve({
-                currentMeeting: Factory.dummyMeeting({end: now}),
+                currentMeeting: Factory.dummyMeeting({end: now.subtract(1, 's')}),
                 nextMeeting: Factory.dummyMeeting({start: now})
             })
             await app.syncBulbs()
             td.verify(bulb.pulse(Color.RED))
+        })
+
+        test('meeting just ended, next meeting later', async () => {
+            td.when(mockCalendarService.getCurrentMeetings(room)).thenResolve({
+                currentMeeting: Factory.dummyMeeting({end: now.subtract(1, 's')}),
+                nextMeeting: Factory.dummyMeeting({start: now.add(15, 'm')})
+            })
+            await app.syncBulbs()
+            td.verify(bulb.setColor(Color.RED))
         })
 
         test('previous meeting just ended, current meeting', async () => {
