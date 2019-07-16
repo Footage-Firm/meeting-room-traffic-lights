@@ -85,20 +85,28 @@ export default class MeetingTrafficLights {
          *
          * Example meeting timeline:
          * (t) ....start.............................end.......
-         *          |      |                   |      |    |
-         *        green  soft-green          orange  red  off
+         *          |           |              |      |    |
+         *     pulse-green  soft-green       orange  red  off
+         *                                            |
+         *                                 (pulse-red if meeting next)
          */
-        if (previousMeeting && now.diff(previousMeeting.end, 'minute') < this._endIntervalMin
-            || currentMeeting && currentMeeting.end.diff(now, 'minute') == 0) {
-            logger.debug('Meeting over! Setting bulb to Red.', {room: room.name, bulb: bulb.label})
+        if (currentMeeting && previousMeeting && now.diff(previousMeeting.end, 'm') < this._endIntervalMin
+            || currentMeeting && now.diff(currentMeeting.end, 'm') == 0 && nextMeeting && nextMeeting.start.diff(now, 'm') == 0) {
+            logger.debug('Meeting over, time to get out! Pulsing Red.', {room: room.name, bulb: bulb.label})
+            await bulb.pulse(Color.RED)
+        } else if (previousMeeting && now.diff(previousMeeting.end, 'm') < this._endIntervalMin
+            || currentMeeting && currentMeeting.end.diff(now, 'm') == 0) {
+            logger.debug('Meeting over. Setting bulb to Red.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.RED)
-        } else if (currentMeeting && currentMeeting.end.diff(now, 'minute') < this._warnIntervalMin) {
+        } else if (currentMeeting && currentMeeting.end.diff(now, 'm') < this._warnIntervalMin) {
             logger.debug('Meeting ending soon. Setting bulb to Orange.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.ORANGE)
+        } else if (currentMeeting && now.diff(currentMeeting.start, 'm') < this._startIntervalMin) {
+            logger.debug('Meeting just started. Pulsing Green.', {room: room.name, bulb: bulb.label})
+            await bulb.pulse(Color.GREEN)
         } else if (currentMeeting) {
             logger.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
-            const color = now.diff(currentMeeting.start, 'minute') < this._startIntervalMin ? Color.GREEN : Color.GREEN_SOFT
-            await bulb.setColor(color)
+            await bulb.setColor(Color.GREEN_SOFT)
         } else {
             logger.debug('No meeting. Turning bulb off.', {room: room.name, bulb: bulb.label})
             await bulb.powerOn(false)

@@ -5,7 +5,6 @@ import Color from "../Color";
 export default class MagicHomeBulb implements Bulb {
 
     constructor(private _client: MagicHomeClient, private _id: string, private _ip: string) {
-
     }
 
     get id(): string {
@@ -22,6 +21,10 @@ export default class MagicHomeBulb implements Bulb {
 
     async powerOn(on: boolean): Promise<void> {
         return this._client.setMagicHomeBulbPower(this._ip, on)
+    }
+
+    async pulse(color: Color): Promise<void> {
+        throw new Error('pulse not implemented for MagicHome')
     }
 
 }
