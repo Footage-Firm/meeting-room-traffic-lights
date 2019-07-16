@@ -71,4 +71,8 @@ export default class Color {
         return new this(0, 0, 0, 0)
     }
 
+    toString() {
+        return `Color: ${this._r},${this._g},${this._b} ${this._brightness}`
+    }
+
 }

@@ -12,5 +12,9 @@ meetingIntervalMin:
   warn: 5
   end: 2
 
+pulse:
+  onStart: true
+  onEnd: true
+
 lifx:
   token: '...'

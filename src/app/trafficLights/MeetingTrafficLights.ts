@@ -90,20 +90,25 @@ export default class MeetingTrafficLights {
          *                                            |
          *                                 (pulse-red if meeting next)
          */
-        if (currentMeeting && previousMeeting && now.diff(previousMeeting.end, 'm') < this._endIntervalMin
-            || currentMeeting && now.diff(currentMeeting.end, 'm') == 0 && nextMeeting && nextMeeting.start.diff(now, 'm') == 0) {
+        const currentMeetingEnded = currentMeeting && now.diff(currentMeeting.end, 'm') == 0
+        const currentMeetingEndingSoon = currentMeeting && currentMeeting.end.diff(now, 'm') < this._warnIntervalMin
+        const currentMeetingJustStarted = currentMeeting && now.diff(currentMeeting.start, 'm') < this._startIntervalMin
+        const previousMeetingJustEnded = previousMeeting && now.diff(previousMeeting.end, 'm') < this._endIntervalMin
+        const nextMeetingStarting = nextMeeting && nextMeeting.start.diff(now, 'm') == 0
+
+        if (config.get('pulse.onEnd') && ((previousMeetingJustEnded && currentMeeting) || (currentMeetingEnded && nextMeetingStarting))) {
             logger.debug('Meeting over, time to get out! Pulsing Red.', {room: room.name, bulb: bulb.label})
             await bulb.pulse(Color.RED)
-        } else if (previousMeeting && now.diff(previousMeeting.end, 'm') < this._endIntervalMin
-            || currentMeeting && currentMeeting.end.diff(now, 'm') == 0) {
-            logger.debug('Meeting over. Setting bulb to Red.', {room: room.name, bulb: bulb.label})
+        } else if (previousMeetingJustEnded || currentMeetingEnded) {
+            logger.debug('Meeting over. Setting color to Red.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.RED)
-        } else if (currentMeeting && currentMeeting.end.diff(now, 'm') < this._warnIntervalMin) {
-            logger.debug('Meeting ending soon. Setting bulb to Orange.', {room: room.name, bulb: bulb.label})
+        } else if (currentMeetingEndingSoon) {
+            logger.debug('Meeting ending soon. Setting color to Orange.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.ORANGE)
-        } else if (currentMeeting && now.diff(currentMeeting.start, 'm') < this._startIntervalMin) {
-            logger.debug('Meeting just started. Pulsing Green.', {room: room.name, bulb: bulb.label})
-            await bulb.pulse(Color.GREEN)
+        } else if (currentMeetingJustStarted) {
+            const pulse = config.get('pulse.onStart')
+            logger.debug(`Meeting just started. ${pulse ? 'Pulsing' : 'Setting color to'} Green.`, {room: room.name, bulb: bulb.label})
+            pulse ? await bulb.pulse(Color.GREEN) : await bulb.setColor(Color.GREEN)
         } else if (currentMeeting) {
             logger.debug('Meeting in progress. Setting color to Green.', {room: room.name, bulb: bulb.label})
             await bulb.setColor(Color.GREEN_SOFT)
