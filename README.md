@@ -4,6 +4,8 @@
 
 A simple and fun way to show the status of meeting rooms!
 
+> Want an easy way to monitor your organization's meeting health? Check out https://meetrics.io
+
 ![Whiteboard Illustration](docs/images/meeting_lights_whiteboard.jpg)
 
 Do meetings always run long in your company? Do you find yourself waiting outside of a meeting room wishing your coworkers would wrap it up? Do you wish there was a simple way to look at a meeting room and know if it is booked? Do you just want a fun way to spruce up your boring meeting rooms?
